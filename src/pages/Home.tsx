@@ -15,13 +15,33 @@ export const Home = () => {
               <form className="border-4 w-3/5 p-10 rounded-xl border-gray">
                 <div className="flex flex-col">
                   <LabelForm htmlFor="nome">Nome:</LabelForm>
-                  <InputForm placeholder="Digite seu nome" id="nome" name="nome" type="text"/>
+                  <InputForm
+                    placeholder="Digite seu nome"
+                    id="nome"
+                    name="nome"
+                    type="text"
+                  />
                   <LabelForm htmlFor="email">E-mail:</LabelForm>
-                  <InputForm placeholder="Digite seu email" id="email" name="email" type="email"/>
+                  <InputForm
+                    placeholder="Digite seu email"
+                    id="email"
+                    name="email"
+                    type="email"
+                  />
                   <LabelForm htmlFor="senha">Senha:</LabelForm>
-                  <InputForm placeholder="Digite sua senha" id="senha" name="senha" type="password" />
+                  <InputForm
+                    placeholder="Digite sua senha"
+                    id="senha"
+                    name="senha"
+                    type="password"
+                  />
                   <ButtonSend type="submit">Cadastrar</ButtonSend>
-                  <p className="text-white mt-3 text-center">ja tem conta ? <Link className="text-darkBlue2" to={'/login'}>Entre</Link></p> 
+                  <p className="text-white mt-3 text-center">
+                    ja tem conta ?{" "}
+                    <Link className="text-darkBlue2" to={"/login"}>
+                      Entre
+                    </Link>
+                  </p>
                 </div>
               </form>
             </div>
