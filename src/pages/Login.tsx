@@ -2,21 +2,22 @@ import { useState } from "react";
 import { InputForm } from "../layout/input";
 import { LabelForm } from "../layout/label";
 import { ButtonSend } from "../components/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate(); // Para redirecionamento
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
-  
+
     const payload = {
       email,
       senha,
     };
-  
+
     try {
       const result = await fetch("http://localhost:3000/usuarios/login", {
         method: "POST",
@@ -25,25 +26,25 @@ export const Login = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (!result.ok) {
         Swal.fire({
           icon: "error",
           title: `Erro ${result.status}`,
           text: `${result.statusText}`,
         });
-        return; // Interrompe o fluxo se a resposta não foi bem-sucedida
+        return;
       }
-  
+
       const data = await result.json();
-  
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        console.log("Login bem-sucedido, token armazenado:", data.token);
+        localStorage.setItem("token", data.token); // Armazena o token no localStorage
         Swal.fire({
           icon: "success",
           title: "Login bem-sucedido!",
           text: "Você foi autenticado com sucesso.",
+        }).then(() => {
+          navigate("/usuarios"); // Redireciona após o login
         });
       } else {
         Swal.fire({
@@ -70,12 +71,12 @@ export const Login = () => {
       }
     }
   }
-  
+
   return (
     <main className="h-screen flex justify-center items-center bg-darkBlue">
       <div className="w-4/5 h-4/5">
         <div className="w-full h-full rounded-md bg-bottom bg-hero-pattern bg-cover">
-          <h1 className="text-center text-7xl font-bold text-lightGraay my-5">
+          <h1 className="text-center text-7xl font-bold text-lightGray my-5">
             Login
           </h1>
           <div className="flex justify-center items-center w-full">
@@ -102,8 +103,8 @@ export const Login = () => {
                 />
                 <ButtonSend type="submit">Entrar</ButtonSend>
                 <p className="text-white mt-3 text-center">
-                  não tem conta?
-                  <Link className=" pl-2 text-darkBlue2" to={"/"}>
+                  Não tem conta?
+                  <Link className="pl-2 text-darkBlue2" to={"/"}>
                     Cadastre-se
                   </Link>
                 </p>
