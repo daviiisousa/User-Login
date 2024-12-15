@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    /* Estilo do scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 10px; /* Largura da barra */
+    }
+  
+    /* Cor de fundo da área do scrollbar */
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #06141B; /* bg-slate-800 */
+      border-radius: 8px;
+    }
+  
+    /* Estilo do thumb (a parte que se move no scroll) */
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #64748b; 
+      border-radius: 8px;
+      border: 2px solid #1e293b; /* Cor da borda para dar espaço */
+    }
+  
+    /* Hover no thumb */
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: #475569; /* bg-slate-600 */
+    }
+  }
+  

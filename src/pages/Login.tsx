@@ -1,76 +1,14 @@
-import { useState } from "react";
-import { InputForm } from "../layout/input";
-import { LabelForm } from "../layout/label";
-import { ButtonSend } from "../components/button";
-import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { InputForm } from "../components/forms/input";
+import { LabelForm } from "../components/forms/label";
+import { ButtonSend } from "../components/butoes/button";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/userContext";
+
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const navigate = useNavigate(); // Para redirecionamento
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
-
-    const payload = {
-      email,
-      senha,
-    };
-
-    try {
-      const result = await fetch("http://localhost:3000/usuarios/login", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!result.ok) {
-        Swal.fire({
-          icon: "error",
-          title: `Erro ${result.status}`,
-          text: `${result.statusText}`,
-        });
-        return;
-      }
-
-      const data = await result.json();
-      if (data.token) {
-        localStorage.setItem("token", data.token); // Armazena o token no localStorage
-        Swal.fire({
-          icon: "success",
-          title: "Login bem-sucedido!",
-          text: "Você foi autenticado com sucesso.",
-        }).then(() => {
-          navigate("/usuarios"); // Redireciona após o login
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Falha no login",
-          text: "Não foi possível autenticar o usuário.",
-        });
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
-        console.error("Erro:", error.message);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
-        console.error("Erro desconhecido:", error);
-      }
-    }
-  }
+  const {login, setEmail, setSenha} = useContext(UserContext)
 
   return (
     <main className="h-screen flex justify-center items-center bg-darkBlue">
