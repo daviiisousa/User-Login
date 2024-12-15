@@ -3,6 +3,7 @@ import { InputForm } from "../layout/input";
 import { ButtonSend } from "../components/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export const Home = () => {
   const [nome, setNome] = useState("");
@@ -28,13 +29,45 @@ export const Home = () => {
       });
 
       if (!resultado.ok) {
-        throw new Error(`Erro: ${resultado.status} - ${resultado.statusText}`);
+        Swal.fire({
+          icon: "error",
+          title: `Erro ${resultado.status} `,
+          text: ` ${resultado.statusText} `,
+        });
+        return;
       }
 
       const data = await resultado.json();
-      console.log("Usuário cadastrado com sucesso:", data);
-    } catch (error) {
-      console.error("Erro ao consumir a API:", error);
+      if (data) {
+        Swal.fire({
+          icon: "success",
+          title: "Usuario ciado",
+          text: "Sucesso ao criar o usuario",
+        });
+        console.log("Usuário cadastrado com sucesso:", data);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erro ao criar usuario",
+          text: "Não foi possivel criar usuario",
+        });
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Swal.fire({
+          icon: "error",
+          title: "Erro no servidor",
+          text: error.message,
+        });
+        console.error("Erro:", error.message);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erro desconhecido",
+          text: "Algo deu errado.",
+        });
+        console.error("Erro desconhecido:", error);
+      }
     }
   }
 
@@ -77,7 +110,7 @@ export const Home = () => {
                 />
                 <ButtonSend type="submit">Cadastrar</ButtonSend>
                 <p className="text-white mt-3 text-center">
-                  Já tem conta? 
+                  Já tem conta?
                   <Link className=" pl-2 text-darkBlue2" to={"/login"}>
                     Entre
                   </Link>
