@@ -11,8 +11,8 @@ interface ModalInterface {
 
 export const Modal = ({ children }: ModalInterface) => {
   const [modal, setModal] = useState(false);
-
-  const { updateUser, setNome, setEmail, setSenha} = useContext(UserContext)
+  
+  const { setNome, setEmail, setSenha} = useContext(UserContext)
 
   return (
     <>
@@ -27,7 +27,7 @@ export const Modal = ({ children }: ModalInterface) => {
             {/* Modal */}
             <div className="fixed z-50 inset-0 flex items-center justify-center">
               <div className="bg-darkBlue p-10 rounded-xl w-full max-w-5xl  shadow-lg">
-                <form onSubmit={() => updateUser}  className="flex flex-col gap-4">
+                <form  className="flex flex-col gap-4">
                   <LabelForm className="text-white" htmlFor="nome">
                     Nome:
                   </LabelForm>
