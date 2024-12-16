@@ -1,15 +1,24 @@
-import { ReactNode } from "react";
+import { ReactNode, MouseEvent } from "react";
 
 interface ButtonSendInterface {
   children: ReactNode;
-  type: "button" | "submit" | "reset" | undefined;
+  type?: "button" | "submit" | "reset";
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  className?: string; // Permite adicionar estilos personalizados
 }
 
-export const ButtonSend = ({ children, type }: ButtonSendInterface) => {
+export const ButtonSend = ({
+  children,
+  type = "button", // Valor padrão definido como "button"
+  onClick,
+  className = "", // Valor padrão vazio
+}: ButtonSendInterface) => {
   return (
     <button
-      className="bg-darkBlue w-full text-white p-5 text-3xl mt-10 rounded-xl hover:bg-white/0 hover:border-2 hover:transition-all transition-all"
       type={type}
+      onClick={onClick}
+      className={`bg-darkBlue w-full text-white p-5 text-3xl mt-10 rounded-xl 
+        hover:bg-white/0 hover:border-2 hover:transition-all transition-all ${className}`}
     >
       {children}
     </button>

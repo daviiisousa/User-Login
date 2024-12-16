@@ -1,7 +1,6 @@
 import { BookUser } from "lucide-react";
 import { Link } from "react-router-dom";
 
-
 export const Header = () => {
   return (
     <header className="bg-darkBlue text-white flex justify-around p-10 items-center">
@@ -10,11 +9,9 @@ export const Header = () => {
         <BookUser size={36} strokeWidth={1} />
       </div>
       <nav className="flex gap-4">
-          <Link to={"/usuarios"}>GET</Link>
-          <Link to={"/post-usuarios"}>POST</Link>
-          <Link to={""}>PUT</Link>
-          <Link to={""}>DELETE</Link>
-        </nav>
+        <Link className="hover:border-b-2 transition-all" to={"/usuarios"}>Usuarios</Link>
+        <Link className="hover:border-b-2 transition-all" to={"/post-usuarios"}>Criar</Link>
+      </nav>
     </header>
   );
 };

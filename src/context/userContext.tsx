@@ -14,13 +14,17 @@ interface UserContextInterface {
   loading: boolean;
   getUsers: () => void;
   createUsuario: (e: React.FormEvent) => Promise<void>;
-  login: (e: React.FormEvent) => Promise<void>
+  login: (e: React.FormEvent) => Promise<void>;
+  deleteUser: (id: string) => void;
+  updateUser: (id: string) => void
   setNome: Dispatch<SetStateAction<string>>;
   setEmail: Dispatch<SetStateAction<string>>;
   setSenha: Dispatch<SetStateAction<string>>;
 }
 
-export const UserContext = createContext<UserContextInterface >({} as UserContextInterface);
+export const UserContext = createContext<UserContextInterface>(
+  {} as UserContextInterface
+);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -207,6 +211,134 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  async function deleteUser(id: string) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return Swal.fire({
+        icon: "error",
+        title: "token invalido",
+        text: "voce nao tem permição",
+      });
+    }
+    try {
+      const resultado = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: "DELETE",
+        body: JSON.stringify({ active: false }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!resultado.ok) {
+        Swal.fire({
+          icon: "error",
+          title: ` ${resultado.status} `,
+          text: `${resultado.statusText} `,
+        });
+      }
+
+      const data = await resultado.json();
+      console.log(data);
+      if (data) {
+        Swal.fire({
+          icon: "success",
+          title: "sucesso ao deletar",
+          text: "usuario deletado",
+        });
+      } else {
+        {
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao deletar usuario",
+            text: "nao foi possivel deletar o usuario",
+          });
+        }
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Swal.fire({
+          icon: "error",
+          title: "Erro no servidor",
+          text: error.message,
+        });
+        console.error("Erro:", error.message);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erro desconhecido",
+          text: "Algo deu errado.",
+        });
+        console.error("Erro desconhecido:", error);
+      }
+    }
+  }
+
+  async function updateUser(id: string) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return Swal.fire({
+        icon: "error",
+        title: "Token invalido",
+        text: "Voce não tem permiçao para acessar essa rota",
+      });
+    }
+    try {
+      const payload = {
+        nome: nome,
+        email: email,
+        senha: senha,
+      };
+      const resultado = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!resultado.ok) {
+        Swal.fire({
+          icon: "error",
+          title: ` ${resultado.status} `,
+          text: ` ${resultado.statusText} `,
+        });
+      }
+      const data = await resultado.json();
+      if (data) {
+        Swal.fire({
+          icon: "success",
+          title: "Usuario editado",
+          text: "O usuario foi editado",
+        });
+        console.log(data)
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erro ao editar",
+          text: "Não foi possivel editar o usuario",
+        });
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Swal.fire({
+          icon: "error",
+          title: "Erro no servidor",
+          text: error.message,
+        });
+        console.error("Erro:", error.message);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erro desconhecido",
+          text: "Algo deu errado.",
+        });
+        console.error("Erro desconhecido:", error);
+      }
+    }
+  }
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -219,7 +351,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setNome,
     setEmail,
     setSenha,
-    login
+    login,
+    deleteUser,
+    updateUser
   };
 
   return <UserContext.Provider value={valor}>{children}</UserContext.Provider>;
