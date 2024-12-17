@@ -123,7 +123,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         Swal.fire({
           icon: "success",
           title: "Usuario criado",
-          text: "Sucesso ao criar o usuario",
+          text: `${data.mensagem} `,
         });
         console.log("Usuário cadastrado com sucesso:", data);
       } else {
@@ -184,7 +184,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         Swal.fire({
           icon: "success",
           title: "Login bem-sucedido!",
-          text: "Você foi autenticado com sucesso.",
+          text: ` ${data.mensagem} `,
         }).then(() => {
           navigate("/usuarios"); // Redireciona após o login
         });
@@ -248,7 +248,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         Swal.fire({
           icon: "success",
           title: "sucesso ao deletar",
-          text: "usuario deletado",
+          text: ` ${data.mensagem} `,
         });
       } else {
         {
@@ -321,7 +321,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         Swal.fire({
           icon: "success",
           title: "Usuario editado",
-          text: "O usuario foi editado",
+          text: `${data.mensagem}`,
         });
         console.log(data)
       } else {
