@@ -7,8 +7,8 @@ import { UserRoundPen, UserRoundX } from "lucide-react";
 import { Modal } from "../components/layout/modal";
 
 export const Usuarios = () => {
-  const { loading, usuarios, deleteUser } = useContext(UserContext);
-
+  const { idUser, setIdUser, loading, usuarios, deleteUser } = useContext(UserContext);
+  console.log(idUser)
   return (
     <>
       <Header />
@@ -35,7 +35,7 @@ export const Usuarios = () => {
                     <p className="text-2xl font-bold">{usuario.email}</p>
                     <UserRoundX onClick={() => deleteUser(usuario.id)} />
                     <Modal>
-                      <UserRoundPen/>
+                      <UserRoundPen onClick={() => setIdUser(usuario.id)}/>
                     </Modal>
                   </div>
                 </div>

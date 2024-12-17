@@ -20,6 +20,8 @@ interface UserContextInterface {
   setNome: Dispatch<SetStateAction<string>>;
   setEmail: Dispatch<SetStateAction<string>>;
   setSenha: Dispatch<SetStateAction<string>>;
+  setIdUser: Dispatch<SetStateAction<string | undefined>>;
+  idUser: string | undefined
 }
 
 export const UserContext = createContext<UserContextInterface>(
@@ -34,6 +36,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [idUser, setIdUser] = useState<string | undefined>();
   const navigate = useNavigate();
 
   async function getUsers() {
@@ -275,7 +278,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function updateUser(id: string) {
+  async function updateUser(id?: string) {
+    if (!id) {
+      Swal.fire({
+        icon: 'error',
+        title: 'id invalido',
+        text: 'id nao fornecido ou invalido'
+      })
+      return;
+    }
     const token = localStorage.getItem("token");
     if (!token) {
       return Swal.fire({
@@ -353,7 +364,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setSenha,
     login,
     deleteUser,
-    updateUser
+    updateUser,
+    setIdUser,
+    idUser
   };
 
   return <UserContext.Provider value={valor}>{children}</UserContext.Provider>;
