@@ -15,6 +15,7 @@ export const Usuarios = () => {
       <main>
         <Container>
           <h1 className="text-4xl font-bold text-center">Usuarios</h1>
+          <h2 className="text-center text-gray text-lg">total usuarios: {usuarios.length}</h2>
           <div className="my-5 bg-darkBlue p-10 rounded-md overflow-y-scroll max-h-[650px] custom-scrollbar">
             {loading ? (
               <p className="text-center text-white text-xl">

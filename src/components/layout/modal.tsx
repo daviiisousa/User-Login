@@ -83,13 +83,13 @@ export const Modal = ({ children }: ModalInterface) => {
       ) : null}
 
       {/* Botão para abrir modal */}
-      <ButtonSend
+      <button
         className="mt-[0rem] p-[0rem] w-[0rem] hover:border-none bg-black/0 relative bottom-0"
         onClick={() => setModal(!modal)}
         type="button"
       >
         {children}
-      </ButtonSend>
+      </button>
     </>
   );
 };
