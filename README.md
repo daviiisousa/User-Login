@@ -1,50 +1,16 @@
-# React + TypeScript + Vite
+# **USER LOGIN**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **Sobre** 📝
+Essa aplicação foi desenvolvida como uma tarefa prática para consumir uma API criada por mim. O objetivo principal é aprimorar meus conhecimentos em **React**, **Tailwind**, **TypeScript**, e o uso de **Fetch** para realizar requisições HTTP.
 
-Currently, two official plugins are available:
+## **Objetivo** 🎯
+Criar uma aplicação funcional que implemente um **CRUD** (Create, Read, Update, Delete) de usuários, proporcionando uma interface intuitiva e eficiente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Tecnologias Utilizadas** 🛠️
+- **React**: Framework para construção de interfaces de usuário.
+- **Tailwind CSS**: Biblioteca para estilização com classes utilitárias.
+- **TypeScript**: Superset do JavaScript com tipagem estática.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## **Estrutura do Projeto** 📂
+Abaixo está uma captura de tela representando a organização dos diretórios e arquivos:  
+![Estrutura do Projeto](src/assets/image.png)
