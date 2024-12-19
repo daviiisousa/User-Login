@@ -124,8 +124,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           icon: "success",
           title: "Usuario criado",
           text: `${data.mensagem} `,
+        }).then(() => {
+          navigate("/login"); 
         });
-        console.log("Usuário cadastrado com sucesso:", data);
       } else {
         Swal.fire({
           icon: "error",

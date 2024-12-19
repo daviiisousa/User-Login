@@ -14,7 +14,7 @@ export const Home = () => {
     <main className="h-screen flex justify-center items-center bg-darkBlue">
       <div className="w-4/5 h-4/5">
         <div className="w-full h-full rounded-md bg-bottom bg-hero-pattern bg-cover">
-          <h1 className="text-center text-7xl font-bold text-lightGraay my-5">
+          <h1 className="text-center text-8xl font-bold text-lightGraay py-10">
             Cadastre-se
           </h1>
           <div className="flex justify-center items-center w-full">
@@ -50,7 +50,7 @@ export const Home = () => {
                 <ButtonSend type="submit">Cadastrar</ButtonSend>
                 <p className="text-white mt-3 text-center">
                   Já tem conta?
-                  <Link className=" pl-2 text-darkBlue2" to={"/login"}>
+                  <Link className=" pl-2 text-darkBlue2 font-bold" to={"/login"}>
                     Entre
                   </Link>
                 </p>

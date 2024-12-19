@@ -17,7 +17,7 @@ export const ButtonSend = ({
     <button
       type={type}
       onClick={onClick}
-      className={`bg-darkBlue w-full text-white p-5 text-3xl mt-10 rounded-xl 
+      className={`bg-darkBlue w-full text-white p-5 text-3xl mt-3 rounded-md 
         hover:bg-white/0 hover:border-2 hover:transition-all transition-all ${className}`}
     >
       {children}

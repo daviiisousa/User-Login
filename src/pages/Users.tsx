@@ -5,6 +5,7 @@ import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
 import { UserRoundPen, UserRoundX } from "lucide-react";
 import { Modal } from "../components/layout/modal";
+import { Footer } from "../components/layout/footer";
 
 export const Usuarios = () => {
   const { idUser, setIdUser, loading, usuarios, deleteUser } = useContext(UserContext);
@@ -14,7 +15,7 @@ export const Usuarios = () => {
       <Header />
       <main>
         <Container>
-          <h1 className="text-4xl font-bold text-center">Usuarios</h1>
+          <h1 className="text-6xl font-bold text-center">Usuarios</h1>
           <h2 className="text-center text-gray text-lg">total usuarios: {usuarios.length}</h2>
           <div className="my-5 bg-darkBlue p-10 rounded-md overflow-y-scroll max-h-[650px] custom-scrollbar">
             {loading ? (
@@ -34,7 +35,7 @@ export const Usuarios = () => {
                   <p className="text-2xl">{usuario.nome}</p>
                   <div className="flex items-center gap-4">
                     <p className="text-2xl font-bold">{usuario.email}</p>
-                    <UserRoundX onClick={() => deleteUser(usuario.id)} />
+                    <UserRoundX className="cursor-pointer" onClick={() => deleteUser(usuario.id)} />
                     <Modal>
                       <UserRoundPen onClick={() => setIdUser(usuario.id)}/>
                     </Modal>
@@ -45,6 +46,7 @@ export const Usuarios = () => {
           </div>
         </Container>
       </main>
+      <Footer>Todos os direitos Reservados</Footer>
     </>
   );
 };

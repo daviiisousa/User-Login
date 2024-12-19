@@ -6,6 +6,7 @@ import { Container } from "../components/layout/container";
 import { Header } from "../components/layout/header";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { Footer } from "../components/layout/footer";
 
 export const PostUsers = () => {
   const { createUsuario, setNome, setEmail, setSenha } =
@@ -16,8 +17,8 @@ export const PostUsers = () => {
       <Header />
       <main>
         <Container>
-          <h1 className="text-3xl font-bold mb-3 flex items-center gap-3">
-            Criar Usuario <UserPlus />
+          <h1 className="text-6xl font-bold my-6 flex items-center gap-4">
+            Criar Usuario <UserPlus size={48} strokeWidth={3} />
           </h1>
           <form
             className="bg-zinc-300 p-10 rounded-lg"
@@ -51,6 +52,7 @@ export const PostUsers = () => {
           </form>
         </Container>
       </main>
+      <Footer>Todos os direitos Reservados</Footer>
     </>
   );
 };

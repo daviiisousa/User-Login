@@ -10,6 +10,6 @@ interface InputFormInterface  {
 
 export const InputForm = ({type, name, id, placeholder, onChange}: InputFormInterface) => {
     return(
-        <input className="mt-3 mb-3 w-full rounded-md p-1 text-black" onChange={onChange}  placeholder={placeholder} type={type} name={name} id={id} required/>
+        <input className="my-3 w-full rounded-md py-3 px-2 text-black" onChange={onChange}  placeholder={placeholder} type={type} name={name} id={id} required/>
     )
 }

@@ -6,6 +6,6 @@ interface FooterInterface {
 
 export const Footer = ({children}: FooterInterface) => {
     return(
-        <footer className="text-center bg-white text-gray font-bold text-3xl ">{children}</footer>
+        <footer className="text-center my-6 bg-white text-gray font-bold text-3xl ">{children}</footer>
     )
 }
