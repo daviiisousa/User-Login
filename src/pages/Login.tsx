@@ -19,7 +19,7 @@ export const Login = () => {
           </h1>
           <div className="flex justify-center items-center w-full">
             <form
-              className="border-4 w-3/5 p-10 rounded-xl border-gray"
+              className="border-4 w-3/5 p-10 rounded-md border-gray"
               onSubmit={login}
             >
               <div className="flex flex-col">

@@ -19,7 +19,7 @@ export const Home = () => {
           </h1>
           <div className="flex justify-center items-center w-full">
             <form
-              className="border-4 w-3/5 p-10 rounded-xl border-gray"
+              className="border-4 w-3/5 p-10 rounded-md border-gray"
               onSubmit={createUsuario}
             >
               <div className="flex flex-col">
