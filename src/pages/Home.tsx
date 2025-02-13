@@ -4,6 +4,7 @@ import { ButtonSend } from "../components/butoes/button";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import {motion} from 'framer-motion'
 
 
 export const Home = () => {
@@ -13,7 +14,11 @@ export const Home = () => {
   return (
     <main className="h-screen flex justify-center items-center bg-darkBlue">
       <div className="w-4/5 h-4/5">
-        <div className="w-full h-full rounded-md bg-bottom bg-hero-pattern bg-cover">
+        <motion.div 
+        initial={{opacity: 0, y: 0}}
+        animate={{opacity: 1, y: -20}}
+        transition={{duration: 1.5}}
+        className="w-full h-full rounded-md bg-bottom bg-hero-pattern bg-cover">
           <h1 className="text-center text-8xl font-bold text-lightGraay py-10">
             Cadastre-se
           </h1>
@@ -57,7 +62,7 @@ export const Home = () => {
               </div>
             </form>
           </div>
-        </div>
+        </motion.div>
       </div>
     </main>
   );

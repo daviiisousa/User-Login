@@ -1,4 +1,5 @@
 import { ReactNode, MouseEvent } from "react";
+import {motion} from 'framer-motion'
 
 interface ButtonSendInterface {
   children: ReactNode;
@@ -14,13 +15,15 @@ export const ButtonSend = ({
   className = "", // Valor padrão vazio
 }: ButtonSendInterface) => {
   return (
-    <button
+    <motion.button
+      whileHover={{scale: 1.05}}
+      transition={{duration: 0.8}}
       type={type}
       onClick={onClick}
       className={`bg-darkBlue w-full text-white p-5 text-3xl mt-3 rounded-md 
-        hover:bg-white/0 hover:border-2 hover:transition-all transition-all ${className}`}
+        hover:bg-white/0 hover:border-1 hover:border ${className}`}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
