@@ -61,15 +61,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
 
-      // if (!resultado.ok) {
-      //   Swal.fire({
-      //     icon: "error",
-      //     title: `Error ${resultado.status}`,
-      //     text: `${resultado.statusText}`,
-      //   });
-      //   return;
-      // }
-
       const data = await resultado.json();
       setUsuarios(data);
     } catch (error: unknown) {
@@ -352,7 +343,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   useEffect(() => {
-    getUsers();
+    getUsers()
   }, []);
 
   const valor: UserContextInterface = {
