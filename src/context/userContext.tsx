@@ -31,7 +31,7 @@ export const UserContext = createContext<UserContextInterface>(
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -41,14 +41,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function getUsers() {
     const token = localStorage.getItem("token");
-
-    if (!token) {
-      return Swal.fire({
-        icon: "error",
-        title: "Token inválido",
-        text: "Você não está autorizado a acessar esta página.",
-      });
-    }
 
     setLoading(true);
 
@@ -235,6 +227,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       const data = await resultado.json();
+      setUsuarios(prevUser => prevUser.filter(u => u.id != id))
       console.log(data);
       if (data) {
         Swal.fire({
@@ -309,6 +302,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       }
       const data = await resultado.json();
+      setUsuarios(prevUsuario => prevUsuario.map(u => u.id === id ? data : u))
       if (data) {
         Swal.fire({
           icon: "success",
