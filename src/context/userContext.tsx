@@ -5,9 +5,10 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import Swal from "sweetalert2";
 import { Usuario } from "../types/userType";
 import { useNavigate } from "react-router-dom";
+import { instance } from "../api/api";
+import { toast } from "react-toastify";
 
 interface UserContextInterface {
   usuarios: Usuario[];
@@ -45,38 +46,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
 
     try {
-      const resultado = await fetch("http://localhost:3000/usuarios", {
-        method: "GET",
+      const resultado = await instance.get('/usuarios', {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
-      });
+      })
 
-      if(!resultado.ok){
-        Swal.fire({
-          icon: "error",
-          title: `Erro: ${resultado.status}`,
-          text: ` ${resultado.statusText} `
-        })
-        return
-      }
-
-      const data = await resultado.json();
+      const data = await resultado.data;
       setUsuarios(data);
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
+        toast.error(`Erro: ${error.message}`)
+        console.error("Erro:", error.message);
       }
     } finally {
       setLoading(false);
@@ -92,55 +73,32 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       senha: senha,
     };
 
+    if (!nome || !email || !senha) {
+      toast.error('Preencha todos os campos')
+      return;
+    }
+
+    if (senha.length < 6) {
+      toast.error('A senha deve ter pelo menos 6 caracteres')
+      console.log('aqui')
+      return
+    }
+
     try {
-      const resultado = await fetch("http://localhost:3000/usuarios", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const resultado = await instance.post('/usuarios', payload)
 
-      if (!resultado.ok) {
-        Swal.fire({
-          icon: "error",
-          title: `Erro ${resultado.status} `,
-          text: ` ${resultado.statusText} `,
-        });
-        return;
-      }
-
-      const data = await resultado.json();
+      const data = await resultado.data;
       if (data) {
-        Swal.fire({
-          icon: "success",
-          title: "Usuario criado",
-          text: `${data.mensagem} `,
-        }).then(() => {
-          navigate("/login"); 
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro ao criar usuario",
-          text: "Não foi possivel criar usuario",
-        });
+        toast.success('usuario criado com sucesso')
+        return navigate("/login");
       }
+
+      toast.error('Erro ao criar usuario')
+
     } catch (error: unknown) {
       if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
+        toast.error(`Erro: ${error.message}`)
         console.error("Erro:", error.message);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
-        console.error("Erro desconhecido:", error);
       }
     }
   }
@@ -149,60 +107,27 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     e.preventDefault();
 
     const payload = {
-      email,
-      senha,
+      email: email,
+      senha: senha,
     };
 
     try {
-      const result = await fetch("http://localhost:3000/usuarios/login", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const resultado = await instance.post('/usuarios/login', payload)
 
-      if (!result.ok) {
-        Swal.fire({
-          icon: "error",
-          title: `Erro ${result.status}`,
-          text: `${result.statusText}`,
-        });
-        return;
-      }
+      const data = await resultado.data;
 
-      const data = await result.json();
       if (data.token) {
-        localStorage.setItem("token", data.token); // Armazena o token no localStorage
-        Swal.fire({
-          icon: "success",
-          title: "Login bem-sucedido!",
-          text: ` ${data.mensagem} `,
-        }).then(() => {
-          navigate("/usuarios"); // Redireciona após o login
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Falha no login",
-          text: "Não foi possível autenticar o usuário.",
-        });
+        localStorage.setItem("token", data.token);
+        toast.success('login realizado com sucesso')
+        return navigate("/usuarios");
+
       }
+      toast.error('Erro ao realizar login')
+
     } catch (error: unknown) {
       if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
+        toast.error(`Erro: ${error.message}`)
         console.error("Erro:", error.message);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
-        console.error("Erro desconhecido:", error);
       }
     }
   }
@@ -211,136 +136,70 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     const token = localStorage.getItem("token");
 
     if (!token) {
-      return Swal.fire({
-        icon: "error",
-        title: "token invalido",
-        text: "voce nao tem permição",
-      });
+      toast.error('Token invalido')
+      return
     }
+
     try {
-      const resultado = await fetch(`http://localhost:3000/usuarios/${id}`, {
-        method: "DELETE",
-        body: JSON.stringify({ active: false }),
+      const resultado = await instance.delete(`/usuarios/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
-      });
+      })
 
-      if (!resultado.ok) {
-        Swal.fire({
-          icon: "error",
-          title: ` ${resultado.status} `,
-          text: `${resultado.statusText} `,
-        });
-      }
+      const data = await resultado.data;
 
-      const data = await resultado.json();
       setUsuarios(prevUser => prevUser.filter(u => u.id != id))
-      console.log(data);
+
       if (data) {
-        Swal.fire({
-          icon: "success",
-          title: "sucesso ao deletar",
-          text: ` ${data.mensagem} `,
-        });
-      } else {
-        {
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao deletar usuario",
-            text: "nao foi possivel deletar o usuario",
-          });
-        }
+        toast.success('Usuario deletado com sucesso')
+        return
       }
+
+      toast.error('Erro ao deletar usuario')
+
     } catch (error: unknown) {
       if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
+        toast.error(`Erro: ${error.message}`)
         console.error("Erro:", error.message);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
-        console.error("Erro desconhecido:", error);
       }
     }
   }
 
   async function updateUser(id?: string) {
-    if (!id) {
-      Swal.fire({
-        icon: 'error',
-        title: 'id invalido',
-        text: 'id nao fornecido ou invalido'
-      })
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error('Token invalido')
       return;
     }
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return Swal.fire({
-        icon: "error",
-        title: "Token invalido",
-        text: "Voce não tem permiçao para acessar essa rota",
-      });
-    }
+
     try {
       const payload = {
         nome: nome,
         email: email,
         senha: senha,
       };
-      const resultado = await fetch(`http://localhost:3000/usuarios/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(payload),
+      const resultado = await instance.put(`/usuarios/${id}`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!resultado.ok) {
-        Swal.fire({
-          icon: "error",
-          title: ` ${resultado.status} `,
-          text: ` ${resultado.statusText} `,
-        });
-      }
-      const data = await resultado.json();
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const data = await resultado.data;
       setUsuarios(prevUsuario => prevUsuario.map(u => u.id === id ? data : u))
+
       if (data) {
-        Swal.fire({
-          icon: "success",
-          title: "Usuario editado",
-          text: `${data.mensagem}`,
-        });
-        console.log(data)
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro ao editar",
-          text: "Não foi possivel editar o usuario",
-        });
+        toast.success('Usuario editado com sucesso')
+        return
       }
+
+      toast.error('Erro ao editar usuario')
+
     } catch (error: unknown) {
       if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no servidor",
-          text: error.message,
-        });
+        toast.error(`Erro: ${error.message}`)
         console.error("Erro:", error.message);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erro desconhecido",
-          text: "Algo deu errado.",
-        });
-        console.error("Erro desconhecido:", error);
       }
     }
   }

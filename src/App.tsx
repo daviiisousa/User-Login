@@ -1,8 +1,10 @@
-import {RouterApp} from '../Router'
+import { ToastContainer } from 'react-toastify'
+import { RouterApp } from '../Router'
 export const App = () => {
   return (
-    <>
-    <RouterApp />
-   </>
+    <main>
+      <ToastContainer />
+      <RouterApp />
+    </main>
   )
 }

@@ -4,66 +4,55 @@ import { ButtonSend } from "../components/butoes/button";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
-import {motion} from 'framer-motion'
-
+import { motion } from 'framer-motion'
 
 export const Home = () => {
 
- const {createUsuario, setNome, setEmail, setSenha} = useContext(UserContext)
+  const { createUsuario, setNome, setEmail, setSenha } = useContext(UserContext)
 
   return (
-    <main className="h-screen flex justify-center items-center bg-darkBlue">
-      <div className="w-4/5 h-4/5">
-        <motion.div 
-        initial={{opacity: 0, y: 0}}
-        animate={{opacity: 1, y: -20}}
-        transition={{duration: 1.5}}
-        className="w-full h-full rounded-md bg-bottom bg-hero-pattern bg-cover">
-          <h1 className="text-center text-8xl font-bold text-lightGraay py-10">
-            Cadastre-se
-          </h1>
-          <div className="flex justify-center items-center w-full">
-            <form
-              className="border-4 w-3/5 p-10 rounded-md border-gray"
-              onSubmit={createUsuario}
-            >
-              <div className="flex flex-col">
-                <LabelForm htmlFor="nome">Nome:</LabelForm>
-                <InputForm
-                  onChange={(e) => setNome(e.target.value)}
-                  placeholder="Digite seu nome"
-                  id="nome"
-                  name="nome"
-                  type="text"
-                />
-                <LabelForm htmlFor="email">E-mail:</LabelForm>
-                <InputForm
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Digite seu email"
-                  id="email"
-                  name="email"
-                  type="email"
-                />
-                <LabelForm htmlFor="senha">Senha:</LabelForm>
-                <InputForm
-                  onChange={(e) => setSenha(e.target.value)}
-                  placeholder="Digite sua senha"
-                  id="senha"
-                  name="senha"
-                  type="password"
-                />
-                <ButtonSend type="submit">Cadastrar</ButtonSend>
-                <p className="text-white mt-3 text-center">
-                  Já tem conta?
-                  <Link className=" pl-2 text-darkBlue2 font-bold" to={"/login"}>
-                    Entre
-                  </Link>
-                </p>
-              </div>
-            </form>
+    <div className="h-screen w-full flex justify-center items-center bg-darkBlue">
+      <motion.div
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: -20 }}
+        transition={{ duration: 1.5 }}
+        className="rounded-md bg-bottom bg-hero-pattern bg-cover w-4/5 h-[90%] flex flex-col justify-center items-center">
+        <h1 className="text-7xl font-bold text-lightGraay mb-10">
+          Cadastre-se
+        </h1>
+        <form onSubmit={createUsuario} className=" w-3/5 p-10 rounded-md border-4 border-gray flex flex-col ">
+          <div>
+            <LabelForm htmlFor="nome" children={'Nome'} />
+            <InputForm
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder="Digite seu nome"
+              onChange={(e) => setNome(e.target.value)}
+            />
+            <LabelForm children={'Email'} htmlFor="email" />
+            <InputForm
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Digite seu email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <LabelForm children={'senha'} htmlFor="senha" />
+            <InputForm
+              id="senha"
+              name="senha"
+              type="password"
+              placeholder="Digite sua senha"
+              onChange={(e) => setSenha(e.target.value)}
+            />
+            <ButtonSend type="submit" children={"Enviar"} />
+            <Link to="/login" className="text-lightGraay text-center block mt-4">
+              Já tem uma conta? <span className="pl-2 text-darkBlue2 font-bold">Faça login</span>
+            </Link>
           </div>
-        </motion.div>
-      </div>
-    </main>
+        </form>
+      </motion.div>
+    </div>
   );
 };
