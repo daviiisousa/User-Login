@@ -17,12 +17,12 @@ interface UserContextInterface {
   createUsuario: (e: React.FormEvent) => Promise<void>;
   login: (e: React.FormEvent) => Promise<void>;
   deleteUser: (id: string) => void;
-  updateUser: (id: string) => void
+  updateUser: (id: string) => void;
   setNome: Dispatch<SetStateAction<string>>;
   setEmail: Dispatch<SetStateAction<string>>;
   setSenha: Dispatch<SetStateAction<string>>;
   setIdUser: Dispatch<SetStateAction<string | undefined>>;
-  idUser: string | undefined
+  idUser: string | undefined;
 }
 
 export const UserContext = createContext<UserContextInterface>(
@@ -42,21 +42,24 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function getUsers() {
     const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
 
     setLoading(true);
 
     try {
-      const resultado = await instance.get('/usuarios', {
+      const resultado = await instance.get("/usuarios", {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       const data = await resultado.data;
       setUsuarios(data);
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`)
+        toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
     } finally {
@@ -74,30 +77,29 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     if (!nome || !email || !senha) {
-      toast.error('Preencha todos os campos')
+      toast.error("Preencha todos os campos");
       return;
     }
 
     if (senha.length < 6) {
-      toast.error('A senha deve ter pelo menos 6 caracteres')
-      console.log('aqui')
-      return
+      toast.error("A senha deve ter pelo menos 6 caracteres");
+      console.log("aqui");
+      return;
     }
 
     try {
-      const resultado = await instance.post('/usuarios', payload)
+      const resultado = await instance.post("/usuarios", payload);
 
       const data = await resultado.data;
       if (data) {
-        toast.success('usuario criado com sucesso')
+        toast.success("usuario criado com sucesso");
         return navigate("/login");
       }
 
-      toast.error('Erro ao criar usuario')
-
+      toast.error("Erro ao criar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`)
+        toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
     }
@@ -112,21 +114,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const resultado = await instance.post('/usuarios/login', payload)
+      const resultado = await instance.post("/usuarios/login", payload);
 
       const data = await resultado.data;
 
       if (data.token) {
         localStorage.setItem("token", data.token);
-        toast.success('login realizado com sucesso')
+        toast.success("login realizado com sucesso");
         return navigate("/usuarios");
-
       }
-      toast.error('Erro ao realizar login')
-
+      toast.error("Erro ao realizar login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`)
+        toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
     }
@@ -136,31 +136,30 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     const token = localStorage.getItem("token");
 
     if (!token) {
-      toast.error('Token invalido')
-      return
+      toast.error("Token invalido");
+      return;
     }
 
     try {
       const resultado = await instance.delete(`/usuarios/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       const data = await resultado.data;
 
-      setUsuarios(prevUser => prevUser.filter(u => u.id != id))
+      setUsuarios((prevUser) => prevUser.filter((u) => u.id != id));
 
       if (data) {
-        toast.success('Usuario deletado com sucesso')
-        return
+        toast.success("Usuario deletado com sucesso");
+        return;
       }
 
-      toast.error('Erro ao deletar usuario')
-
+      toast.error("Erro ao deletar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`)
+        toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
     }
@@ -170,7 +169,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     const token = localStorage.getItem("token");
 
     if (!token) {
-      toast.error('Token invalido')
+      toast.error("Token invalido");
       return;
     }
 
@@ -182,30 +181,31 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       };
       const resultado = await instance.put(`/usuarios/${id}`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await resultado.data;
-      setUsuarios(prevUsuario => prevUsuario.map(u => u.id === id ? data : u))
+      setUsuarios((prevUsuario) =>
+        prevUsuario.map((u) => (u.id === id ? data : u))
+      );
 
       if (data) {
-        toast.success('Usuario editado com sucesso')
-        return
+        toast.success("Usuario editado com sucesso");
+        return;
       }
 
-      toast.error('Erro ao editar usuario')
-
+      toast.error("Erro ao editar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`)
+        toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
     }
   }
 
   useEffect(() => {
-    getUsers()
+    getUsers();
   }, []);
 
   const valor: UserContextInterface = {
@@ -220,7 +220,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     deleteUser,
     updateUser,
     setIdUser,
-    idUser
+    idUser,
   };
 
   return <UserContext.Provider value={valor}>{children}</UserContext.Provider>;
