@@ -8,10 +8,10 @@ export default {
         greeyBlue: "#253745",
         lightGraay: "#4A5C6A",
         darkBlue2: "#11212D",
-        gray: '#9BABAB'
+        gray: "#9BABAB",
       },
       backgroundImage: {
-        "hero-pattern": "url('./src/assets/montanha.jpg')",
+        "hero-pattern": "url('/montanha.jpg')",
       },
     },
   },
