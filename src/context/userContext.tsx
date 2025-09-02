@@ -42,6 +42,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function getUsers() {
     const token = localStorage.getItem("token");
+
     if (!token) {
       return;
     }
@@ -49,7 +50,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
 
     try {
-      const resultado = await instance.get("/usuarios", {
+      const resultado = await instance.get("/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +89,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     try {
-      const resultado = await instance.post("/usuarios", payload);
+      const resultado = await instance.post("/user", payload);
 
       const data = await resultado.data;
       if (data) {
@@ -114,7 +115,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const resultado = await instance.post("/usuarios/login", payload);
+      const resultado = await instance.post("/login", payload);
 
       const data = await resultado.data;
 
