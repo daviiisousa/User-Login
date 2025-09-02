@@ -9,8 +9,9 @@ import { Footer } from "../components/layout/footer";
 import { motion } from "framer-motion";
 
 export const Usuarios = () => {
-  const { setIdUser, loading, usuarios, deleteUser } =
-    useContext(UserContext);
+  const { setIdUser, loading, usuarios, deleteUser } = useContext(UserContext);
+  console.log("usuarios: ", usuarios);
+
   return (
     <>
       <Header />
