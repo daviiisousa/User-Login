@@ -10,8 +10,8 @@ export const Home = () => {
     useContext(UserContext);
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
-      <div className="bg-bottom bg-hero-pattern bg-cover p-10 rounded-2xl space-y-5">
+    <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue">
+      <div className="bg-bottom bg-hero-pattern bg-cover p-10 rounded-2xl space-y-5 m-10">
         <h1 className="text-7xl font-bold text-lightGraay">Cadastre-se</h1>
         <div className="flex items-center justify-center">
           <form
