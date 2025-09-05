@@ -10,8 +10,7 @@ import { motion } from "framer-motion";
 
 export const Usuarios = () => {
   const { setIdUser, loading, usuarios, deleteUser } = useContext(UserContext);
-  console.log("usuarios: ", usuarios);
-
+  console.info("usuarios: ", usuarios);
   return (
     <>
       <Header />

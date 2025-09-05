@@ -55,8 +55,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           Authorization: `Bearer ${token}`,
         },
       });
+      //apagar aqui
 
       const data = await resultado.data;
+      console.info(resultado.data);
       setUsuarios(data);
     } catch (error) {
       if (error instanceof Error) {
@@ -142,7 +144,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     try {
-      const resultado = await instance.delete(`/usuarios/${id}`, {
+      const resultado = await instance.delete(`/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -180,7 +182,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         email: email,
         senha: senha,
       };
-      const resultado = await instance.put(`/usuarios/${id}`, payload, {
+      const resultado = await instance.put(`/user/${id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
