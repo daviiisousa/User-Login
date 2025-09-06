@@ -13,7 +13,7 @@ export const LabelForm = ({
 }: LabelFormProps) => {
   return (
     <label
-      className={`text-2xl mt-3 font-medium text-slate-900 ${className} `}
+      className={`text-sm md:text-2xl font-medium text-slate-900 ${className} `}
       htmlFor={htmlFor}
     >
       {children}

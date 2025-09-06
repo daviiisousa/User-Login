@@ -1,7 +1,6 @@
 import React, {
   createContext,
   useState,
-  useEffect,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -55,7 +54,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      //apagar aqui
 
       const data = await resultado.data;
       console.info(resultado.data);
@@ -123,6 +121,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.data));
         toast.success("login realizado com sucesso");
         return navigate("/usuarios");
       }
@@ -206,10 +205,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   const valor: UserContextInterface = {
     usuarios,

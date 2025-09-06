@@ -10,11 +10,13 @@ export const Login = () => {
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
-      <div className="bg-bottom bg-hero-pattern bg-cover w-[70%] p-10 rounded-2xl space-y-5">
-        <h1 className="text-7xl text-lightGraay font-bold ">Login</h1>
+      <div className="bg-bottom bg-hero-pattern bg-cover w-[70%] p-5 md:p-10 rounded-2xl space-y-5">
+        <h1 className="text-5xl md:text-7xl text-lightGraay font-bold ">
+          Login
+        </h1>
         <div className="flex justify-center items-center w-full">
           <form
-            className="border-4 p-10 rounded-2xl w-full border-gray backdrop-blur-md"
+            className="border-4 p-5 md:p-10 rounded-2xl w-full border-gray backdrop-blur-md"
             onSubmit={login}
           >
             <div className="flex flex-col">
@@ -35,9 +37,12 @@ export const Login = () => {
                 type="password"
               />
               <ButtonSend type="submit">Entrar</ButtonSend>
-              <p className="text-white mt-3 text-center">
+              <p className="text-white mt-3 text-center text-sm">
                 Não tem conta?
-                <Link className="pl-2 text-darkBlue2 font-bold" to={"/"}>
+                <Link
+                  className="pl-2 text-darkBlue2 font-bold text-sm"
+                  to={"/"}
+                >
                   Cadastre-se
                 </Link>
               </p>

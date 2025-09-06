@@ -11,14 +11,16 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue">
-      <div className="bg-bottom bg-hero-pattern bg-cover p-10 rounded-2xl space-y-5 m-10">
-        <h1 className="text-7xl font-bold text-lightGraay">Cadastre-se</h1>
+      <div className="bg-bottom bg-hero-pattern bg-cover p-5 md:p-10 rounded-2xl space-y-5 mx-10 md:my-10">
+        <h1 className="text-5xl md:text-7xl font-bold text-lightGraay">
+          Cadastre-se
+        </h1>
         <div className="flex items-center justify-center">
           <form
             onSubmit={createUsuario}
-            className="w-full p-10 rounded-2xl border-4 border-gray backdrop-blur-md flex flex-col "
+            className="w-full p-5 md:p-10 rounded-2xl border-4 border-gray backdrop-blur-md flex flex-col"
           >
-            <div>
+            <div className="">
               <LabelForm htmlFor="nome" children={"Nome"} />
               <InputForm
                 id="nome"
@@ -44,9 +46,12 @@ export const Home = () => {
                 onChange={(e) => setSenha(e.target.value)}
               />
               <ButtonSend type="submit" children={"Cadastrar"} />
-              <Link to="/login" className="text-white text-center block mt-4">
+              <Link
+                to="/login"
+                className="text-white text-center block mt-4 text-sm"
+              >
                 Já tem uma conta?{" "}
-                <span className="pl-2 text-darkBlue2 font-bold">
+                <span className="pl-2 text-darkBlue2 font-bold text-sm">
                   Faça login
                 </span>
               </Link>
