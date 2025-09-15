@@ -1,28 +1,14 @@
-import { ChangeEvent } from "react";
+import { InputHTMLAttributes } from "react";
 
-interface InputFormInterface {
-  type: string;
-  name: string;
-  id: string;
-  placeholder: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+type InputFormInterface = {
+  className?: string;
+} & InputHTMLAttributes<HTMLInputElement>;
 
-export const InputForm = ({
-  type,
-  name,
-  id,
-  placeholder,
-  onChange,
-}: InputFormInterface) => {
+export const InputForm = ({ className, ...props }: InputFormInterface) => {
   return (
     <input
-      className="mb-3 w-full rounded-2xl py-3 px-2 text-black bg-zinc-200 hover:ring ring-lightGraay"
-      onChange={onChange}
-      placeholder={placeholder}
-      type={type}
-      name={name}
-      id={id}
+      className={`mb-3 w-full rounded-2xl py-3 px-2 text-black bg-zinc-200 hover:ring ring-lightGraay ${className}`}
+      {...props}
       required
     />
   );

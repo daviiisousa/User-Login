@@ -7,8 +7,16 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 
 export const PostUsers = () => {
-  const { createUsuario, setNome, setEmail, setSenha } =
-    useContext(UserContext);
+  const {
+    createUsuario,
+    setNome,
+    setEmail,
+    setSenha,
+    loading,
+    nome,
+    email,
+    senha,
+  } = useContext(UserContext);
 
   return (
     <Container>
@@ -18,6 +26,7 @@ export const PostUsers = () => {
       <form className="bg-lightGraay p-10 rounded-2xl" onSubmit={createUsuario}>
         <LabelForm htmlFor="nome">Nome:</LabelForm>
         <InputForm
+          value={nome}
           id="nome"
           name="nome"
           placeholder="Digite seu nome"
@@ -26,21 +35,25 @@ export const PostUsers = () => {
         />
         <LabelForm htmlFor="email">E-mail:</LabelForm>
         <InputForm
+          value={email}
           id="email"
-          name="emal"
+          name="email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Digite seu email"
           type="email"
         />
         <LabelForm htmlFor="senha">Senha:</LabelForm>
         <InputForm
+          value={senha}
           id="senha"
           name="senha"
           placeholder="Digite sua senha"
           type="password"
           onChange={(e) => setSenha(e.target.value)}
         />
-        <ButtonSend type="submit">Enviar</ButtonSend>
+        <ButtonSend variant="primary" disabled={loading} type="submit">
+          {loading ? "Carregando..." : "Enviar"}
+        </ButtonSend>
       </form>
     </Container>
   );

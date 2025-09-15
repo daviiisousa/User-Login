@@ -45,7 +45,11 @@ export const Home = () => {
                 placeholder="Digite sua senha"
                 onChange={(e) => setSenha(e.target.value)}
               />
-              <ButtonSend type="submit" children={"Cadastrar"} />
+              <ButtonSend
+                variant="primary"
+                type="submit"
+                children={"Cadastrar"}
+              />
               <Link
                 to="/login"
                 className="text-white text-center block mt-4 text-sm"

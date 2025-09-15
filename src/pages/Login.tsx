@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 
 export const Login = () => {
-  const { login, setEmail, setSenha } = useContext(UserContext);
+  const { login, setEmail, setSenha, loading } = useContext(UserContext);
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
@@ -36,7 +36,9 @@ export const Login = () => {
                 name="senha"
                 type="password"
               />
-              <ButtonSend type="submit">Entrar</ButtonSend>
+              <ButtonSend variant="primary" disabled={loading} type="submit">
+                {loading ? "Carregando..." : "Entrar"}
+              </ButtonSend>
               <p className="text-white mt-3 text-center text-sm">
                 Não tem conta?
                 <Link

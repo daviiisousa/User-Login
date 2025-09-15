@@ -37,7 +37,7 @@ export const Usuarios = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, amount: 0.2 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex justify-between items-center text-white hover:bg-darkBlue2 px-3 py-2  gap-2 md:gap-0 border-b border-gray"
+                className="flex justify-between items-center text-white hover:bg-darkBlue2 px-3 py-2  gap-2 md:gap-0 border-b border-gray hover:cursor-pointer"
                 key={usuario.id}
               >
                 <p className="text-sm md:text-2xl">{usuario.nome}</p>

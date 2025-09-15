@@ -34,10 +34,10 @@ export const Modal = ({ children }: ModalInterface) => {
                     updateUser(idUser);
                   } else {
                     Swal.fire({
-                      icon: 'error',
-                      title: 'id invalido',
-                      text: 'id nao fornecido ou invalido'
-                    })
+                      icon: "error",
+                      title: "id invalido",
+                      text: "id nao fornecido ou invalido",
+                    });
                   }
                 }}
                 className="flex flex-col gap-4"
@@ -72,8 +72,14 @@ export const Modal = ({ children }: ModalInterface) => {
                   type="password"
                   onChange={(e) => setSenha(e.target.value)}
                 />
-                <ButtonSend type="submit">Enviar</ButtonSend>
-                <ButtonSend type="button" onClick={() => setModal(false)}>
+                <ButtonSend variant="secondary" type="submit">
+                  Enviar
+                </ButtonSend>
+                <ButtonSend
+                  variant="secondary"
+                  type="button"
+                  onClick={() => setModal(false)}
+                >
                   Fechar
                 </ButtonSend>
               </form>

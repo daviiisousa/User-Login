@@ -22,6 +22,9 @@ interface UserContextInterface {
   setSenha: Dispatch<SetStateAction<string>>;
   setIdUser: Dispatch<SetStateAction<string | undefined>>;
   idUser: string | undefined;
+  nome: string;
+  email: string;
+  senha: string;
 }
 
 export const UserContext = createContext<UserContextInterface>(
@@ -70,6 +73,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function createUsuario(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
 
     const payload = {
       nome: nome,
@@ -94,7 +98,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await resultado.data;
       if (data) {
         toast.success("usuario criado com sucesso");
-        return navigate("/login");
+        return;
       }
 
       toast.error("Erro ao criar usuario");
@@ -103,11 +107,17 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
+    } finally {
+      setLoading(false);
+      setEmail("");
+      setNome("");
+      setSenha("");
     }
   }
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
 
     const payload = {
       email: email,
@@ -131,6 +141,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -207,6 +219,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const valor: UserContextInterface = {
+    nome,
+    email,
+    senha,
     usuarios,
     getUsers,
     loading,
