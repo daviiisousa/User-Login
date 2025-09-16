@@ -6,7 +6,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 
 export const Login = () => {
-  const { login, setEmail, setSenha, loading } = useContext(UserContext);
+  const { login, setEmail, setSenha, loading, senha, email } =
+    useContext(UserContext);
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
@@ -22,6 +23,7 @@ export const Login = () => {
             <div className="flex flex-col">
               <LabelForm htmlFor="email">E-mail:</LabelForm>
               <InputForm
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Digite seu email"
                 id="email"
@@ -30,6 +32,7 @@ export const Login = () => {
               />
               <LabelForm htmlFor="senha">Senha:</LabelForm>
               <InputForm
+                value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 placeholder="Digite sua senha"
                 id="senha"

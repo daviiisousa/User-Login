@@ -143,6 +143,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } finally {
       setLoading(false);
+      setEmail("");
+      setSenha("");
     }
   }
 

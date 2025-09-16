@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 
 export const Home = () => {
-  const { createUsuario, setNome, setEmail, setSenha } =
+  const { createUsuario, setNome, setEmail, setSenha, nome, email, senha } =
     useContext(UserContext);
 
   return (
@@ -23,6 +23,7 @@ export const Home = () => {
             <div className="">
               <LabelForm htmlFor="nome" children={"Nome"} />
               <InputForm
+                value={nome}
                 id="nome"
                 name="nome"
                 type="text"
@@ -31,6 +32,7 @@ export const Home = () => {
               />
               <LabelForm children={"Email"} htmlFor="email" />
               <InputForm
+                value={email}
                 id="email"
                 name="email"
                 type="email"
@@ -39,6 +41,7 @@ export const Home = () => {
               />
               <LabelForm children={"senha"} htmlFor="senha" />
               <InputForm
+                value={senha}
                 id="senha"
                 name="senha"
                 type="password"
