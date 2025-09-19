@@ -124,6 +124,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       senha: senha,
     };
 
+    if (!email || !senha) {
+      toast.error("Preencha todos os campos");
+      setLoading(false);
+      return;
+    }
+
+    if (senha.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres");
+      setLoading(false);
+      return;
+    }
+
     try {
       const resultado = await instance.post("/login", payload);
 
