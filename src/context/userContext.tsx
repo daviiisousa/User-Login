@@ -57,7 +57,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       setUsuarios(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('Erro ao buscar usuarios');
+        navigate("/");
         console.error("Erro:", error.message);
       }
     } finally {
@@ -101,7 +101,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao se cadastrar");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('Erro ao criar usuario');
         console.error("Erro:", error.message);
       }
     } finally {
@@ -145,7 +144,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao realizar login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('Erro ao realizar login');
         console.error("Erro:", error.message);
       }
     } finally {
@@ -173,7 +171,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao deletar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('Erro ao deletar usuario');
+        navigate("/");
         console.error("Erro:", error.message);
       }
     }
@@ -208,7 +206,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao editar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('Erro ao editar usuario');
+        navigate("/");
         console.error("Erro:", error.message);
       }
     }
