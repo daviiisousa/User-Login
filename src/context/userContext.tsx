@@ -8,7 +8,7 @@ import { Usuario } from "../types/userType";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../api/api";
 import { toast } from "react-toastify";
-import { verifyId, verifyPasswordLength, verifyRequiredFields, verifyToken } from "../helpers/verifications";
+import { verifyId, verifyPasswordLength, verifyRequiredFields } from "../helpers/verifications";
 
 interface UserContextInterface {
   usuarios: Usuario[];
@@ -44,25 +44,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const navigate = useNavigate();
 
   async function getUsers() {
-    const token = localStorage.getItem("token");
-
-    if (!verifyToken(token)) return;
-
     setLoading(true);
 
     try {
-      const resultado = await instance.get("/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resultado = await instance.get("/users");
 
       const data = await resultado.data;
-      if(!data) return;
+      if(!data) {
+        toast.error('Nenhum usuario encontrado');
+        return;
+      };
       setUsuarios(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        toast.error('Erro ao buscar usuarios');
         console.error("Erro:", error.message);
       }
     } finally {
@@ -103,10 +98,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      toast.error("Erro ao criar usuario");
+      toast.error("Erro ao se cadastrar");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        toast.error('Erro ao criar usuario');
         console.error("Erro:", error.message);
       }
     } finally {
@@ -150,7 +145,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao realizar login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        toast.error('Erro ao realizar login');
         console.error("Erro:", error.message);
       }
     } finally {
@@ -161,18 +156,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function deleteUser(id: string) {
-    const token = localStorage.getItem("token");
-
-    if (!verifyToken(token)) return;
-
     if (!verifyId(id)) return;
 
     try {
-      const resultado = await instance.delete(`/user/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resultado = await instance.delete(`/user/${id}`);
 
       const data = await resultado.data;
 
@@ -186,22 +173,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao deletar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        toast.error('Erro ao deletar usuario');
         console.error("Erro:", error.message);
       }
     }
   }
 
   async function updateUser(id?: string) {
-    const token = localStorage.getItem("token");
-
     if (!verifyId(id)) return;
 
     if (!verifyRequiredFields(nome, email, senha)) return;
 
     if (!verifyPasswordLength(senha)) return;
-
-    if (!verifyToken(token)) return;
     
     const payload = {
         nome: nome,
@@ -210,12 +193,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
     try {
-      
-      const resultado = await instance.put(`/user/${id}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resultado = await instance.put(`/user/${id}`, payload);
 
       const data = await resultado.data;
       setUsuarios((prevUsuario) =>
@@ -230,7 +208,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.error("Erro ao editar usuario");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        toast.error('Erro ao editar usuario');
         console.error("Erro:", error.message);
       }
     }
