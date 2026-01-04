@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 
 export const Home = () => {
-  const { createUsuario, setNome, setEmail, setSenha, nome, email, senha } =
+  const { createUsuario, setNome, setEmail, setSenha, nome, email, senha, loading } =
     useContext(UserContext);
 
   return (
@@ -49,9 +49,10 @@ export const Home = () => {
                 onChange={(e) => setSenha(e.target.value)}
               />
               <ButtonSend
+                disabled={loading}
                 variant="primary"
                 type="submit"
-                children={"Cadastrar"}
+                children={loading ? "Cadastrando..." : "Cadastrar"}
               />
               <Link
                 to="/login"

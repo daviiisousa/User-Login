@@ -8,6 +8,7 @@ import { Usuario } from "../types/userType";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../api/api";
 import { toast } from "react-toastify";
+import { verifyId, verifyPasswordLength, verifyRequiredFields, verifyToken } from "../helpers/verifications";
 
 interface UserContextInterface {
   usuarios: Usuario[];
@@ -45,9 +46,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   async function getUsers() {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      return;
-    }
+    if (!verifyToken(token)) return;
 
     setLoading(true);
 
@@ -59,9 +58,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       const data = await resultado.data;
-      console.info(resultado.data);
+      if(!data) return;
       setUsuarios(data);
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Erro: ${error.message}`);
         console.error("Erro:", error.message);
@@ -75,29 +74,32 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     e.preventDefault();
     setLoading(true);
 
+    if (!verifyRequiredFields(nome, email, senha)) {
+      setLoading(false);
+      return;
+    }
+
+    if (!verifyPasswordLength(senha)) {
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       nome: nome,
       email: email,
       senha: senha,
     };
 
-    if (!nome || !email || !senha) {
-      toast.error("Preencha todos os campos");
-      return;
-    }
-
-    if (senha.length < 6) {
-      toast.error("A senha deve ter pelo menos 6 caracteres");
-      console.log("aqui");
-      return;
-    }
-
     try {
       const resultado = await instance.post("/user", payload);
 
       const data = await resultado.data;
+
       if (data) {
         toast.success("usuario criado com sucesso");
+        setTimeout(() => {
+          navigate("/login");
+        }, 500);
         return;
       }
 
@@ -119,22 +121,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     e.preventDefault();
     setLoading(true);
 
+    if (!verifyRequiredFields(email, senha)) {
+      setLoading(false);
+      return;
+    }
+
+    if (!verifyPasswordLength(senha)) {
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       email: email,
       senha: senha,
     };
-
-    if (!email || !senha) {
-      toast.error("Preencha todos os campos");
-      setLoading(false);
-      return;
-    }
-
-    if (senha.length < 6) {
-      toast.error("A senha deve ter pelo menos 6 caracteres");
-      setLoading(false);
-      return;
-    }
 
     try {
       const resultado = await instance.post("/login", payload);
@@ -163,10 +163,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   async function deleteUser(id: string) {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      toast.error("Token invalido");
-      return;
-    }
+    if (!verifyToken(token)) return;
+
+    if (!verifyId(id)) return;
 
     try {
       const resultado = await instance.delete(`/user/${id}`, {
@@ -196,17 +195,22 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   async function updateUser(id?: string) {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      toast.error("Token invalido");
-      return;
-    }
+    if (!verifyId(id)) return;
 
-    try {
-      const payload = {
+    if (!verifyRequiredFields(nome, email, senha)) return;
+
+    if (!verifyPasswordLength(senha)) return;
+
+    if (!verifyToken(token)) return;
+    
+    const payload = {
         nome: nome,
         email: email,
         senha: senha,
       };
+
+    try {
+      
       const resultado = await instance.put(`/user/${id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
