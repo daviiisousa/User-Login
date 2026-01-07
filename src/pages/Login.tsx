@@ -29,6 +29,7 @@ export const Login = () => {
                 id="email"
                 name="email"
                 type="email"
+                required
               />
               <LabelForm htmlFor="senha">Senha:</LabelForm>
               <InputForm
@@ -38,6 +39,7 @@ export const Login = () => {
                 id="senha"
                 name="senha"
                 type="password"
+                required
               />
               <ButtonSend variant="primary" disabled={loading} type="submit">
                 {loading ? "Carregando..." : "Entrar"}

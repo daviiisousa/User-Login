@@ -29,6 +29,7 @@ export const Home = () => {
                 type="text"
                 placeholder="Digite seu nome"
                 onChange={(e) => setNome(e.target.value)}
+                required
               />
               <LabelForm children={"Email"} htmlFor="email" />
               <InputForm
@@ -38,6 +39,7 @@ export const Home = () => {
                 type="email"
                 placeholder="Digite seu email"
                 onChange={(e) => setEmail(e.target.value)}
+                required  
               />
               <LabelForm children={"senha"} htmlFor="senha" />
               <InputForm
@@ -47,6 +49,7 @@ export const Home = () => {
                 type="password"
                 placeholder="Digite sua senha"
                 onChange={(e) => setSenha(e.target.value)}
+                required
               />
               <ButtonSend
                 disabled={loading}
