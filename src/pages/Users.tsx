@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Usuario } from "../types/userType";
 import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
@@ -7,25 +7,18 @@ import { Modal } from "../components/layout/modal";
 import { motion } from "framer-motion";
 import { TableSkeleton } from "../components/skeletons/tableSkeletons";
 import { InputForm } from "../components/forms/input";
+import { useSearch } from "../hooks/useSearch";
 
 export const Usuarios = () => {
-  const { setIdUser, loading, usuarios, deleteUser, getUsers } =
-    useContext(UserContext);
+  const {
+    setIdUser,
+    loading,
+    usuarios,
+    deleteUser,
+    getUsers
+  } = useContext(UserContext);
 
-  const [textSearch, setTextSearch] = React.useState("");
-  const [usersFiltered, setUsersFiltered] = React.useState<Usuario[]>([]);
-
-  function handleSearchText(e: React.ChangeEvent<HTMLInputElement>) {
-    setTextSearch(e.target.value);
-
-    const filtered = usuarios.filter((usuario) => {
-      return usuario.nome
-        .toLocaleLowerCase()
-        .includes(textSearch.toLocaleLowerCase());
-    });
-
-    setUsersFiltered(filtered);
-  }
+    const { searchText, filteredItems, handleSearch } = useSearch<Usuario>(usuarios, "nome");
 
   useEffect(() => {
     getUsers();
@@ -42,13 +35,13 @@ export const Usuarios = () => {
           <div>
             <InputForm
               placeholder="Nome do usuario"
-              onChange={handleSearchText}
+              onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
           {loading ? (
             <TableSkeleton />
-          ) : textSearch ? (
-            usersFiltered.map((usuario) => (
+          ) : searchText ? (
+            filteredItems.map((usuario) => (
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
