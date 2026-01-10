@@ -6,9 +6,9 @@ import React, {
 } from "react";
 import { Usuario } from "../types/userType";
 import { useNavigate } from "react-router-dom";
-import { instance } from "../api/api";
 import { toast } from "react-toastify";
 import { verifyId, verifyPasswordLength, verifyRequiredFields } from "../helpers/verifications";
+import { userService } from "../service/userService";
 
 interface UserContextInterface {
   usuarios: Usuario[];
@@ -32,6 +32,7 @@ export const UserContext = createContext<UserContextInterface>(
   {} as UserContextInterface
 );
 
+
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -47,9 +48,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
 
     try {
-      const resultado = await instance.get("/users");
+      const data = await userService.getAll();
 
-      const data = await resultado.data;
       if(!data) {
         toast.error('Nenhum usuario encontrado');
         return;
@@ -86,9 +86,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const resultado = await instance.post("/user", payload);
-
-      const data = await resultado.data;
+      const data = await userService.create(payload);
 
       if (data) {
         toast.success("usuario criado com sucesso");
@@ -131,9 +129,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const resultado = await instance.post("/login", payload);
-
-      const data = await resultado.data;
+      const data = await userService.login(payload);
 
       if (data.token) {
         localStorage.setItem("token", data.token);
@@ -157,9 +153,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!verifyId(id)) return;
 
     try {
-      const resultado = await instance.delete(`/user/${id}`);
-
-      const data = await resultado.data;
+      const data = await userService.delete(id);
 
       setUsuarios((prevUser) => prevUser.filter((u) => u.id != id));
 
@@ -177,7 +171,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function updateUser(id?: string) {
+  async function updateUser(id: string) {
     if (!verifyId(id)) return;
 
     if (!verifyRequiredFields(nome, email, senha)) return;
@@ -191,9 +185,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
     try {
-      const resultado = await instance.put(`/user/${id}`, payload);
+      const data = await userService.update(id, payload);
 
-      const data = await resultado.data;
       setUsuarios((prevUsuario) =>
         prevUsuario.map((u) => (u.id === id ? data : u))
       );
