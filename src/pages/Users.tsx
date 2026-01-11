@@ -1,41 +1,28 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Usuario } from "../types/userType";
 import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
-import { UserRoundPen, UserRoundX } from "lucide-react";
-import { motion } from "framer-motion";
 import { TableSkeleton } from "../components/skeletons/tableSkeletons";
 import { InputForm } from "../components/forms/input";
 import { useSearch } from "../hooks/useSearch";
 import { ModalDelete } from "../components/modals/modalDelete";
 import { ModalEdit } from "../components/modals/modalEdit";
+import { TableUsuarios } from "../components/tableUsuarios";
 
 export const Usuarios = () => {
   const {
     loading,
     usuarios,
-    getUsers
+    getUsers,
   } = useContext(UserContext);
 
     const { searchText, filteredItems, handleSearch } = useSearch<Usuario>(usuarios, "nome");
-    
-    const [showModalDelete, setShowModalDele] = useState(false);
-    const [showModalEdit, setShowModalEdit] = useState(false);
-    const [usuarioId, setUsuarioId] = useState("");
-
-    function handleShowModalDelete(id: string) {
-      setUsuarioId(id);
-      setShowModalDele(true);
-    }
-
-    function handleShowModalEdit(id: string) {
-      setUsuarioId(id);
-      setShowModalEdit(true);
-    }
 
   useEffect(() => {
     getUsers();
   }, []);
+
+  const usuariosExibidos = searchText ? filteredItems : usuarios;
 
   return (
     <>
@@ -53,67 +40,12 @@ export const Usuarios = () => {
           </div>
           {loading ? (
             <TableSkeleton />
-          ) : searchText ? (
-            filteredItems.map((usuario) => (
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex justify-between items-center text-white hover:bg-darkBlue2 px-3 py-2  gap-2 md:gap-0 border-b border-gray hover:cursor-pointer"
-                key={usuario.id}
-              >
-                <p className="text-sm md:text-2xl">{usuario.nome}</p>
-                <div className="flex items-center gap-2 md:gap-4">
-                  <p className="text-sm md:text-2xl font-bold">
-                    {usuario.email}
-                  </p>
-                  <UserRoundX
-                    className="cursor-pointer"
-                    onClick={() => handleShowModalDelete(usuario.id)}
-                  />
-                  <UserRoundPen
-                      className="cursor-pointer"
-                      onClick={() => handleShowModalEdit(usuario.id)}
-                    />
-                </div>
-              </motion.div>
-            ))
           ) : (
-            <div className="overflow-y-scroll overflow-x-hidden custom-scrollbar max-h-[550px] w-full">
-              {usuarios.map((usuario) => (
-                <>
-                  <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false, amount: 0.2 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="flex justify-between items-center text-white hover:bg-darkBlue2 p-2 md:gap-0 border-b border-gray hover:cursor-pointer w-full"
-                  key={usuario.id}
-                >
-                  <p className="text-sm md:text-2xl">{usuario.nome}</p>
-                  <div className="flex items-center gap-2 pr-5">
-                    <p className="text-sm md:text-2xl font-bold">
-                      {usuario.email}
-                    </p>
-                    <UserRoundX
-                      className="cursor-pointer"
-                      onClick={() => handleShowModalDelete(usuario.id)}
-                    />
-                    <UserRoundPen
-                      className="cursor-pointer"
-                      onClick={() => handleShowModalEdit(usuario.id)}
-                    />
-                  </div>
-                </motion.div>
-                  
-                </>
-              ))}
-            </div>
+              <TableUsuarios usuarios={usuariosExibidos} />
           )}
         </div>
-        <ModalDelete showModal={showModalDelete} setShowModal={setShowModalDele} id={usuarioId} />
-        <ModalEdit showModal={showModalEdit} setShowModal={setShowModalEdit} id={usuarioId} />
+        <ModalDelete />
+        <ModalEdit />
       </Container>
     </>
   );

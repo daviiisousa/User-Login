@@ -24,6 +24,12 @@ interface UserContextInterface {
   nome: string;
   email: string;
   senha: string;
+  showModalDelete: boolean;
+  setShowModalDelete: Dispatch<SetStateAction<boolean>>;
+  showModalEdit: boolean;
+  setShowModalEdit: Dispatch<SetStateAction<boolean>>;
+  usuarioId: string;
+  setUsuarioId: Dispatch<SetStateAction<string>>;
 }
 
 export const UserContext = createContext<UserContextInterface>(
@@ -39,6 +45,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [usuarioId, setUsuarioId] = useState("");
   const navigate = useNavigate();
 
   async function getUsers() {
@@ -224,6 +233,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     login,
     deleteUser,
     updateUser,
+    showModalDelete,
+    setShowModalDelete,
+    showModalEdit,
+    setShowModalEdit,
+    usuarioId,
+    setUsuarioId,
   };
 
   return <UserContext.Provider value={valor}>{children}</UserContext.Provider>;

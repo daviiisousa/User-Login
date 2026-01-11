@@ -4,25 +4,18 @@ import { LabelForm } from "../../forms/label";
 import { Modal } from "../modal";
 import { UserContext } from "../../../context/userContext";
 
-type ModalEditProps = {
-    showModal: boolean;
-    setShowModal: (value: boolean) => void;
-    id: string;
-};
-
-export function ModalEdit({ showModal, setShowModal, id }: ModalEditProps) {
-    const { setNome, updateUser, setEmail, setSenha, loading} = useContext(UserContext);
+export function ModalEdit() {
+    const { setNome, updateUser, setEmail, setSenha, loading, usuarioId, setShowModalEdit, showModalEdit } = useContext(UserContext);
 
     async function handleSave(event: React.FormEvent) {
         event.preventDefault();
-        await updateUser(id);
-        setShowModal(false);
+        await updateUser(usuarioId);
+        setShowModalEdit(false);
     }
-
 
     return (
         <>
-            {showModal && (
+            {showModalEdit && (
                 <Modal>
                     <div className="bg-zinc-800 p-6 rounded-lg shadow-lg min-w-[800px] ">
                         <h2 className="text-xl font-semibold mb-4">Editar Usuário</h2>
@@ -63,7 +56,7 @@ export function ModalEdit({ showModal, setShowModal, id }: ModalEditProps) {
                                 <button 
                                     type="button"
                                     className="px-4 py-2 bg-zinc-700 rounded hover:bg-zinc-600" 
-                                    onClick={() => setShowModal(false)}
+                                    onClick={() =>  setShowModalEdit(false)}
                                 >
                                     Cancelar
                                 </button>
