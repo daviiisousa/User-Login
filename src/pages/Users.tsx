@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Usuario } from "../types/userType";
 import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
@@ -8,17 +8,25 @@ import { motion } from "framer-motion";
 import { TableSkeleton } from "../components/skeletons/tableSkeletons";
 import { InputForm } from "../components/forms/input";
 import { useSearch } from "../hooks/useSearch";
+import { ModalDelete } from "../components/modals/modalDelete";
 
 export const Usuarios = () => {
   const {
     setIdUser,
     loading,
     usuarios,
-    deleteUser,
     getUsers
   } = useContext(UserContext);
 
     const { searchText, filteredItems, handleSearch } = useSearch<Usuario>(usuarios, "nome");
+    
+    const [showModalDelete, setShowModalDele] = useState(false);
+    const [usuarioId, setUsuarioId] = useState("");
+
+    function handleShowModalDelete(id: string) {
+      setUsuarioId(id);
+      setShowModalDele(true);
+    }
 
   useEffect(() => {
     getUsers();
@@ -57,7 +65,7 @@ export const Usuarios = () => {
                   </p>
                   <UserRoundX
                     className="cursor-pointer"
-                    onClick={() => deleteUser(usuario.id)}
+                    onClick={() => handleShowModalDelete(usuario.id)}
                   />
                   <Modal>
                     <UserRoundPen onClick={() => setIdUser(usuario.id)} />
@@ -68,7 +76,8 @@ export const Usuarios = () => {
           ) : (
             <div className="overflow-y-scroll overflow-x-hidden custom-scrollbar max-h-[550px] w-full">
               {usuarios.map((usuario) => (
-                <motion.div
+                <>
+                  <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.2 }}
@@ -83,17 +92,20 @@ export const Usuarios = () => {
                     </p>
                     <UserRoundX
                       className="cursor-pointer"
-                      onClick={() => deleteUser(usuario.id)}
+                      onClick={() => handleShowModalDelete(usuario.id)}
                     />
                     <Modal>
                       <UserRoundPen onClick={() => setIdUser(usuario.id)} />
                     </Modal>
                   </div>
                 </motion.div>
+                  
+                </>
               ))}
             </div>
           )}
         </div>
+        <ModalDelete showModal={showModalDelete} setShowModal={setShowModalDele} id={usuarioId} />
       </Container>
     </>
   );

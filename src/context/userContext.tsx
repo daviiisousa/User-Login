@@ -151,6 +151,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function deleteUser(id: string) {
     if (!verifyId(id)) return;
+    setLoading(true);
 
     try {
       const data = await userService.delete(id);
@@ -168,6 +169,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         navigate("/");
         console.error("Erro:", error.message);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
