@@ -3,16 +3,15 @@ import { Usuario } from "../types/userType";
 import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
 import { UserRoundPen, UserRoundX } from "lucide-react";
-import { Modal } from "../components/layout/modal";
 import { motion } from "framer-motion";
 import { TableSkeleton } from "../components/skeletons/tableSkeletons";
 import { InputForm } from "../components/forms/input";
 import { useSearch } from "../hooks/useSearch";
 import { ModalDelete } from "../components/modals/modalDelete";
+import { ModalEdit } from "../components/modals/modalEdit";
 
 export const Usuarios = () => {
   const {
-    setIdUser,
     loading,
     usuarios,
     getUsers
@@ -21,11 +20,17 @@ export const Usuarios = () => {
     const { searchText, filteredItems, handleSearch } = useSearch<Usuario>(usuarios, "nome");
     
     const [showModalDelete, setShowModalDele] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(false);
     const [usuarioId, setUsuarioId] = useState("");
 
     function handleShowModalDelete(id: string) {
       setUsuarioId(id);
       setShowModalDele(true);
+    }
+
+    function handleShowModalEdit(id: string) {
+      setUsuarioId(id);
+      setShowModalEdit(true);
     }
 
   useEffect(() => {
@@ -67,9 +72,10 @@ export const Usuarios = () => {
                     className="cursor-pointer"
                     onClick={() => handleShowModalDelete(usuario.id)}
                   />
-                  <Modal>
-                    <UserRoundPen onClick={() => setIdUser(usuario.id)} />
-                  </Modal>
+                  <UserRoundPen
+                      className="cursor-pointer"
+                      onClick={() => handleShowModalEdit(usuario.id)}
+                    />
                 </div>
               </motion.div>
             ))
@@ -94,9 +100,10 @@ export const Usuarios = () => {
                       className="cursor-pointer"
                       onClick={() => handleShowModalDelete(usuario.id)}
                     />
-                    <Modal>
-                      <UserRoundPen onClick={() => setIdUser(usuario.id)} />
-                    </Modal>
+                    <UserRoundPen
+                      className="cursor-pointer"
+                      onClick={() => handleShowModalEdit(usuario.id)}
+                    />
                   </div>
                 </motion.div>
                   
@@ -106,6 +113,7 @@ export const Usuarios = () => {
           )}
         </div>
         <ModalDelete showModal={showModalDelete} setShowModal={setShowModalDele} id={usuarioId} />
+        <ModalEdit showModal={showModalEdit} setShowModal={setShowModalEdit} id={usuarioId} />
       </Container>
     </>
   );

@@ -12,6 +12,10 @@ interface LoginPayload {
   senha: string;
 }
 
+interface UpdateUserPayload {
+  data: Usuario;
+}
+
 export const userService = {
   async getAll() {
     const response = await instance.get<Usuario[]>("/users");
@@ -34,7 +38,7 @@ export const userService = {
   },
 
   async update(id: string, payload: CreateUserPayload) {
-    const response = await instance.put<Usuario>(`/user/${id}`, payload);
+    const response = await instance.put<UpdateUserPayload>(`/user/${id}`, payload);
     return response.data;
   },
 };

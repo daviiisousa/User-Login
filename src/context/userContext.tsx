@@ -21,8 +21,6 @@ interface UserContextInterface {
   setNome: Dispatch<SetStateAction<string>>;
   setEmail: Dispatch<SetStateAction<string>>;
   setSenha: Dispatch<SetStateAction<string>>;
-  setIdUser: Dispatch<SetStateAction<string | undefined>>;
-  idUser: string | undefined;
   nome: string;
   email: string;
   senha: string;
@@ -41,7 +39,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [idUser, setIdUser] = useState<string | undefined>();
   const navigate = useNavigate();
 
   async function getUsers() {
@@ -187,11 +184,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         senha: senha,
       };
 
+    setLoading(true);
+
     try {
       const data = await userService.update(id, payload);
+      console.log(data);
 
       setUsuarios((prevUsuario) =>
-        prevUsuario.map((u) => (u.id === id ? data : u))
+        prevUsuario.map((u) => (u.id === id ? data.data : u))
       );
 
       if (data) {
@@ -205,6 +205,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         navigate("/");
         console.error("Erro:", error.message);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -222,8 +224,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     login,
     deleteUser,
     updateUser,
-    setIdUser,
-    idUser,
   };
 
   return <UserContext.Provider value={valor}>{children}</UserContext.Provider>;

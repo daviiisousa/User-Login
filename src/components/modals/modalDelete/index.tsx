@@ -11,8 +11,8 @@ type ModalDeleteProps = {
 export function ModalDelete({showModal, setShowModal, id}: ModalDeleteProps) {
     const {deleteUser, loading} = useContext(UserContext);
 
-    function handleDeleteUser(){
-        deleteUser(id);
+    async function handleDeleteUser(){
+       await deleteUser(id);
         setShowModal(false);
     }
     
