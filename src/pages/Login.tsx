@@ -11,7 +11,10 @@ export const Login = () => {
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
-      <div className="bg-bottom bg-hero-pattern bg-cover w-full mx-5 p-5 md:p-10 md:w-[60%]  border rounded-2xl space-y-5">
+      <div 
+       className="bg-bottom bg-cover w-full mx-5 p-5 md:p-10 md:w-[60%]  border rounded-2xl space-y-5"
+       style={{ backgroundImage: 'url(/montanha.jpg)' }}
+      >
         <h1 className="text-5xl md:text-7xl text-lightGraay font-bold ">
           Login
         </h1>

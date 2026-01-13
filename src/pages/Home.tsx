@@ -11,7 +11,10 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue">
-      <div className="bg-bottom bg-hero-pattern bg-cover p-5 md:p-10 rounded-2xl space-y-5 mx-5 md:mx-10  md:my-10">
+      <div 
+        className="bg-bottom bg-cover p-5 md:p-10 rounded-2xl space-y-5 mx-5 md:mx-10  md:my-10"
+        style={{ backgroundImage: 'url(/montanha.jpg)' }}
+      >
         <h1 className="text-5xl md:text-7xl font-bold text-lightGraay">
           Cadastre-se
         </h1>
