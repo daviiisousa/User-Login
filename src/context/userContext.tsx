@@ -4,20 +4,19 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Usuario } from "../types/userType";
+import { CreateUserData, Usuario, LoginFormData } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { verifyId, verifyPasswordLength, verifyRequiredFields } from "../helpers/verifications";
 import { userService } from "../service/userService";
-
 interface UserContextInterface {
   usuarios: Usuario[];
   loading: boolean;
   getUsers: () => void;
-  createUsuario: (e: React.FormEvent) => Promise<void>;
-  login: (e: React.FormEvent) => Promise<void>;
+  createUsuario: (data: CreateUserData) => Promise<void>;
+  login: (data: LoginFormData) => Promise<void>;
   deleteUser: (id: string) => void;
-  updateUser: (id: string) => void;
+  updateUser: (id: string, data: CreateUserData) => void;
   setNome: Dispatch<SetStateAction<string>>;
   setEmail: Dispatch<SetStateAction<string>>;
   setSenha: Dispatch<SetStateAction<string>>;
@@ -71,30 +70,29 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function createUsuario(e: React.FormEvent) {
-    e.preventDefault();
+  async function createUsuario(data: CreateUserData) {
     setLoading(true);
 
-    if (!verifyRequiredFields(nome, email, senha)) {
+    if (!verifyRequiredFields(data.nome, data.email, data.senha)) {
       setLoading(false);
       return;
     }
 
-    if (!verifyPasswordLength(senha)) {
+    if (!verifyPasswordLength(data.senha)) {
       setLoading(false);
       return;
     }
 
     const payload = {
-      nome: nome,
-      email: email,
-      senha: senha,
+      nome: data.nome,
+      email: data.email,
+      senha: data.senha,
     };
 
     try {
-      const data = await userService.create(payload);
+      const result = await userService.create(payload);
 
-      if (data) {
+      if (result) {
         toast.success("usuario criado com sucesso");
         setTimeout(() => {
           navigate("/login");
@@ -115,31 +113,33 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
+  async function login(data: LoginFormData) {
     setLoading(true);
+    
+    console.log("Dados recebidos:", data);
 
-    if (!verifyRequiredFields(email, senha)) {
+    if (!data?.email || !data?.senha) {
+      toast.error("Preencha todos os campos");
       setLoading(false);
       return;
     }
 
-    if (!verifyPasswordLength(senha)) {
+    if (!verifyPasswordLength(data.senha)) {
       setLoading(false);
       return;
     }
 
     const payload = {
-      email: email,
-      senha: senha,
+      email: data.email,
+      senha: data.senha,
     };
 
     try {
-      const data = await userService.login(payload);
+      const result = await userService.login(payload);
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.data));
+      if (result.token) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.data));
         toast.success("login realizado com sucesso");
         return navigate("/usuarios");
       }
@@ -180,17 +180,17 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function updateUser(id: string) {
+  async function updateUser(id: string, data: CreateUserData) {
     if (!verifyId(id)) return;
 
-    if (!verifyRequiredFields(nome, email, senha)) return;
+    if (!verifyRequiredFields(data.nome, data.email, data.senha)) return;
 
-    if (!verifyPasswordLength(senha)) return;
+    if (!verifyPasswordLength(data.senha)) return;
     
     const payload = {
-        nome: nome,
-        email: email,
-        senha: senha,
+        nome: data.nome,
+        email: data.email,
+        senha: data.senha,
       };
 
     setLoading(true);
@@ -200,7 +200,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       console.log(data);
 
       setUsuarios((prevUsuario) =>
-        prevUsuario.map((u) => (u.id === id ? data.data : u))
+        prevUsuario.map((u) => (u.id === id ? data : u))
       );
 
       if (data) {

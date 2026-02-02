@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Usuario } from "../types/userType";
+import { Usuario } from "../types/types";
 import { Container } from "../components/layout/container";
 import { UserContext } from "../context/userContext";
 import { TableSkeleton } from "../components/skeletons/tableSkeletons";
@@ -38,11 +38,8 @@ export const Usuarios = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
-          {loading ? (
-            <TableSkeleton />
-          ) : (
-              <TableUsuarios usuarios={usuariosExibidos} />
-          )}
+          {loading ? ( <TableSkeleton /> ) : ( <TableUsuarios usuarios={usuariosExibidos} 
+          /> )}
         </div>
         <ModalDelete />
         <ModalEdit />

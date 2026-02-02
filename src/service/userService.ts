@@ -1,20 +1,6 @@
 import { instance } from "../api/api";
-import { Usuario } from "../types/userType";
+import { CreateUserData, LoginFormData, Usuario } from "../types/types";
 
-interface CreateUserPayload {
-  nome: string;
-  email: string;
-  senha: string;
-}
-
-interface LoginPayload {
-  email: string;
-  senha: string;
-}
-
-interface UpdateUserPayload {
-  data: Usuario;
-}
 
 export const userService = {
   async getAll() {
@@ -22,12 +8,12 @@ export const userService = {
     return response.data;
   },
 
-  async create(payload: CreateUserPayload) {
+  async create(payload: CreateUserData) {
     const response = await instance.post<Usuario>("/user", payload);
     return response.data;
   },
 
-  async login(payload: LoginPayload) {
+  async login(payload: LoginFormData) {
     const response = await instance.post<{ token: string; data: Usuario }>("/login", payload);
     return response.data;
   },
@@ -37,8 +23,8 @@ export const userService = {
     return response.data;
   },
 
-  async update(id: string, payload: CreateUserPayload) {
-    const response = await instance.put<UpdateUserPayload>(`/user/${id}`, payload);
+  async update(id: string, payload: CreateUserData) {
+    const response = await instance.put<Usuario>(`/user/${id}`, payload);
     return response.data;
   },
 };

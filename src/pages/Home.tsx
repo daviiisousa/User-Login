@@ -4,15 +4,19 @@ import { ButtonSend } from "../components/butoes/button";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { useForm } from "react-hook-form";
+import { Errors } from "../components/erros";
+import { CreateUserData } from "../types/types";
 
 export const Home = () => {
-  const { createUsuario, setNome, setEmail, setSenha, nome, email, senha, loading } =
-    useContext(UserContext);
+  const { createUsuario} = useContext(UserContext);
+
+  const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<CreateUserData>();
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue">
       <div 
-        className="bg-bottom bg-cover p-5 md:p-10 rounded-2xl space-y-5 mx-5 md:mx-10  md:my-10"
+        className="w-[70%] bg-bottom bg-cover p-5 md:p-10 rounded-2xl space-y-5 mx-5 md:mx-10  md:my-10"
         style={{ backgroundImage: 'url(/montanha.jpg)' }}
       >
         <h1 className="text-5xl md:text-7xl font-bold text-lightGraay">
@@ -20,45 +24,63 @@ export const Home = () => {
         </h1>
         <div className="flex items-center justify-center">
           <form
-            onSubmit={createUsuario}
+            onSubmit={handleSubmit(createUsuario)}
             className="w-full p-5 md:p-10 rounded-2xl border-4 border-gray backdrop-blur-md flex flex-col"
           >
             <div className="">
-              <LabelForm htmlFor="nome" children={"Nome"} />
-              <InputForm
-                value={nome}
-                id="nome"
-                name="nome"
-                type="text"
-                placeholder="Digite seu nome"
-                onChange={(e) => setNome(e.target.value)}
-                required
-              />
-              <LabelForm children={"Email"} htmlFor="email" />
-              <InputForm
-                value={email}
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Digite seu email"
-                onChange={(e) => setEmail(e.target.value)}
-                required  
-              />
-              <LabelForm children={"senha"} htmlFor="senha" />
-              <InputForm
-                value={senha}
-                id="senha"
-                name="senha"
-                type="password"
-                placeholder="Digite sua senha"
-                onChange={(e) => setSenha(e.target.value)}
-                required
-              />
+              <div className="mb-4">
+                <LabelForm htmlFor="nome" children={"Nome"} />
+                <InputForm
+                  id="nome"
+                  type="text"
+                  placeholder="Digite seu nome"
+                  {...register("nome", {
+                    required: "Nome é obrigatório",
+                    minLength: {
+                      value: 2,
+                      message: "Nome deve ter pelo menos 2 caracteres",
+                    },
+                  })}
+                />
+                {errors.nome && ( <Errors error={String(errors.nome.message)} />)}
+              </div>
+              <div className="mb-4">
+                <LabelForm children={"Email"} htmlFor="email" />
+                <InputForm
+                  id="email"
+                  type="email"
+                  placeholder="Digite seu email"
+                  {...register("email", {
+                    required: "E-mail é obrigatório",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "E-mail inválido",
+                    },
+                  })}
+                />
+                {errors.email && ( <Errors error={String(errors.email.message)} />)}
+              </div>
+              <div className="mb-4">
+                <LabelForm children={"senha"} htmlFor="senha" />
+                <InputForm
+                  id="senha"
+                  type="password"
+                  placeholder="Digite sua senha"
+                  {...register("senha", {
+                    required: "Senha é obrigatória",
+                    minLength: {
+                      value: 6,
+                      message: "A senha deve ter no mínimo 6 caracteres",
+                    },
+                  })}
+                />
+                {errors.senha && ( <Errors error={String(errors.senha.message)} />)}
+              </div>
               <ButtonSend
-                disabled={loading}
+                disabled={isSubmitting}
                 variant="primary"
                 type="submit"
-                children={loading ? "Cadastrando..." : "Cadastrar"}
+                children={isSubmitting ? "Cadastrando..." : "Cadastrar"}
               />
               <Link
                 to="/login"

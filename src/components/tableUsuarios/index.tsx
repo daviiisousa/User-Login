@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { UserRoundPen, UserRoundX } from "lucide-react";
-import { Usuario } from "../../types/userType";
+import { Usuario } from "../../types/types";
 
 type TableUsuariosProps = {
     usuarios: Usuario[]
