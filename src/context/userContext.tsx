@@ -35,7 +35,6 @@ export const UserContext = createContext<UserContextInterface>(
   {} as UserContextInterface
 );
 
-
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {

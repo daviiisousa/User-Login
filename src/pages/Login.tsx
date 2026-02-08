@@ -5,12 +5,19 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 import { useForm } from "react-hook-form";
-import { LoginFormData } from "../types/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginFormData, loginSchema } from "../schema/login.schema";
 
 export const Login = () => {
   const { login } = useContext(UserContext);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>();
+  const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting } 
+    } = useForm<LoginFormData>({
+      resolver: zodResolver(loginSchema)
+  });
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center bg-darkBlue ">
@@ -33,15 +40,9 @@ export const Login = () => {
                   placeholder="Digite seu email"
                   id="email"
                   type="email"
-                  {...register("email", {
-                    required: "E-mail é obrigatório",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "E-mail inválido",
-                    }
-                  })}
+                  {...register("email")}
                 />
-                {errors.email && ( <span className="text-red-500">{String(errors.email.message)}</span>)}
+                {errors.email && ( <span className="text-red-500">{errors.email.message}</span>)}
               </div>
               <div className="mb-4">
                 <LabelForm htmlFor="senha">Senha:</LabelForm>
@@ -49,15 +50,9 @@ export const Login = () => {
                   placeholder="Digite sua senha"
                   id="senha"
                   type="password"
-                  {...register("senha", {
-                    required: "Senha é obrigatória",
-                    minLength: {
-                      value: 6,
-                      message: "A senha deve ter no mínimo 6 caracteres",
-                    },
-                  })}
+                  {...register("senha")}
                 />
-                {errors.senha && ( <span className="text-red-500">{String(errors.senha.message)}</span>)}
+                {errors.senha && ( <span className="text-red-500">{errors.senha.message}</span>)}
               </div>
               <ButtonSend variant="primary" disabled={isSubmitting} type="submit">
                 {isSubmitting ? "Entrando..." : "Entrar"}

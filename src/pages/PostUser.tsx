@@ -6,13 +6,20 @@ import { Container } from "../components/layout/container";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 import { useForm } from "react-hook-form";
-import { CreateUserData } from "../types/types";
 import { Errors } from "../components/erros";
+import { CreateUserData, registerSchema } from "../schema/register.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const PostUsers = () => {
-  const {createUsuario,} = useContext(UserContext);
+  const {createUsuario} = useContext(UserContext);
 
-  const {register, handleSubmit, formState: {errors, isSubmitting} } = useForm<CreateUserData>();
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, isSubmitting}
+  } = useForm<CreateUserData>({
+    resolver: zodResolver(registerSchema)
+  });
 
   return (
     <Container>
@@ -25,45 +32,25 @@ export const PostUsers = () => {
           id="nome"
           placeholder="Digite seu nome"
           type="text"
-          {...register("nome",
-            { required: "Nome é obrigatório",
-                minLength: {
-                  value: 2,
-                  message: "Nome deve ter pelo menos 2 caracteres",
-                }
-            })
-          }
+          {...register("nome")}
         />
-        {errors.nome && <Errors error={String(errors.nome?.message)} />}
+        {errors.nome && <Errors error={errors.nome.message} />}
         <LabelForm htmlFor="email">E-mail:</LabelForm>
         <InputForm
           id="email"
           placeholder="Digite seu email"
           type="email"
-          {...register("email",
-            { required: "E-mail é obrigatório",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "E-mail inválido",
-              }
-            })
-          }
-        />{errors.email && <Errors error={String(errors.email?.message)} />}
+          {...register("email")}
+        />
+        {errors.email && <Errors error={errors.email.message} />}
         <LabelForm htmlFor="senha">Senha:</LabelForm>
         <InputForm
           id="senha"
           placeholder="Digite sua senha"
           type="password"
-          {...register("senha",
-            { required: "Senha é obrigatória",
-              minLength: {
-                value: 6,
-                message: "Senha deve ter pelo menos 6 caracteres",
-              }
-            })
-          }
+          {...register("senha")}
         />
-        {errors.senha && <Errors error={String(errors.senha?.message)} />}
+        {errors.senha && <Errors error={errors.senha.message} />}
         <ButtonSend variant="primary" disabled={isSubmitting} type="submit">
           {isSubmitting ? "Carregando..." : "Enviar"}
         </ButtonSend>

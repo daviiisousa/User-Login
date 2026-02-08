@@ -1,3 +1,3 @@
-export function Errors({ error }: { error: string }) {
-    return <span className="text-red-500">{error}</span>
+export function Errors({ error }: { error: string | undefined }) {
+    return <span className="text-red-500">{error || "error"} </span>
 }

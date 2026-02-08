@@ -6,12 +6,19 @@ import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 import { useForm } from "react-hook-form";
 import { Errors } from "../components/erros";
-import { CreateUserData } from "../types/types";
+import { CreateUserData, registerSchema } from "../schema/register.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const Home = () => {
   const { createUsuario} = useContext(UserContext);
 
-  const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<CreateUserData>();
+  const {
+      register,
+      handleSubmit,
+      formState: {errors, isSubmitting}
+    } = useForm<CreateUserData>({
+      resolver: zodResolver(registerSchema)
+    });
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-darkBlue">
@@ -34,15 +41,9 @@ export const Home = () => {
                   id="nome"
                   type="text"
                   placeholder="Digite seu nome"
-                  {...register("nome", {
-                    required: "Nome é obrigatório",
-                    minLength: {
-                      value: 2,
-                      message: "Nome deve ter pelo menos 2 caracteres",
-                    },
-                  })}
+                  {...register("nome")}
                 />
-                {errors.nome && ( <Errors error={String(errors.nome.message)} />)}
+                {errors.nome && ( <Errors error={errors.nome.message} />)}
               </div>
               <div className="mb-4">
                 <LabelForm children={"Email"} htmlFor="email" />
@@ -50,15 +51,9 @@ export const Home = () => {
                   id="email"
                   type="email"
                   placeholder="Digite seu email"
-                  {...register("email", {
-                    required: "E-mail é obrigatório",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "E-mail inválido",
-                    },
-                  })}
+                  {...register("email")}
                 />
-                {errors.email && ( <Errors error={String(errors.email.message)} />)}
+                {errors.email && ( <Errors error={errors.email.message} />)}
               </div>
               <div className="mb-4">
                 <LabelForm children={"senha"} htmlFor="senha" />
@@ -66,15 +61,9 @@ export const Home = () => {
                   id="senha"
                   type="password"
                   placeholder="Digite sua senha"
-                  {...register("senha", {
-                    required: "Senha é obrigatória",
-                    minLength: {
-                      value: 6,
-                      message: "A senha deve ter no mínimo 6 caracteres",
-                    },
-                  })}
+                  {...register("senha")}
                 />
-                {errors.senha && ( <Errors error={String(errors.senha.message)} />)}
+                {errors.senha && ( <Errors error={errors.senha.message} />)}
               </div>
               <ButtonSend
                 disabled={isSubmitting}
