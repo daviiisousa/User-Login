@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { verifyId, verifyPasswordLength, verifyRequiredFields } from "../helpers/verifications";
 import { userService } from "../service/userService";
+import { userSchema } from "../schema/user.schema";
 interface UserContextInterface {
   usuarios: Usuario[];
   loading: boolean;
@@ -89,9 +90,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const result = await userService.create(payload);
+      const data = await userService.create(payload);
 
-      if (result) {
+      const result = userSchema.safeParse(data)
+
+      if (!result.success) {
+        toast.error("dados incorreto");
+        return
+      }
+
+      if (result.success) {
         toast.success("usuario criado com sucesso");
         setTimeout(() => {
           navigate("/login");
@@ -114,19 +122,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function login(data: LoginFormData) {
     setLoading(true);
-    
-    console.log("Dados recebidos:", data);
-
-    if (!data?.email || !data?.senha) {
-      toast.error("Preencha todos os campos");
-      setLoading(false);
-      return;
-    }
-
-    if (!verifyPasswordLength(data.senha)) {
-      setLoading(false);
-      return;
-    }
 
     const payload = {
       email: data.email,
@@ -149,8 +144,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } finally {
       setLoading(false);
-      setEmail("");
-      setSenha("");
     }
   }
 
